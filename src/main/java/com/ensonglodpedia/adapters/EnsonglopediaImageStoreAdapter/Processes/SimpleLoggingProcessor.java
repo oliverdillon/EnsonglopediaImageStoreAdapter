@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Routes;
+package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -10,6 +10,6 @@ public class SimpleLoggingProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        logger.info("SimpleLoggingProcessor {}",exchange.getMessage().getBody());
+        logger.info("SimpleLoggingProcessor");
     }
 }

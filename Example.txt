@@ -1,0 +1,3 @@
+curl -v -i -H "Content-Type: image/jpeg" --data "@Hotel_California_Back.jpeg" http://localhost:8080/rest/images
+curl -v -i -H "Content-Type: text/plain" --data "Hotel_California_Back.jpeg" http://localhost:8080/rest/images
+openssl base64 -in <infile> -out <outfile>
