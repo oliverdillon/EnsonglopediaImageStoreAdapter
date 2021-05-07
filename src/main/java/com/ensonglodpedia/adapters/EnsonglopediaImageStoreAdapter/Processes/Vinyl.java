@@ -1,13 +1,14 @@
 package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes;
 
 import java.time.Instant;
+import java.util.List;
 
 public class Vinyl {
     private String id;
     private String artist;
     private String album;
     private String date;
-//    private List<String> imgs;
+    private List<String> imgs;
 
     public String getId() {
         return id;
@@ -41,11 +42,11 @@ public class Vinyl {
         this.date = date;
     }
 
-//    public List<String> getImgs() {
-//        return imgs;
-//    }
-//
-//    public void setImgs(List<String> imgs) {
-//        this.imgs = imgs;
-//    }
+    public List<String> getImgs() {
+        return imgs;
+    }
+
+    public void setImgs(List<String> imgs) {
+        this.imgs = imgs;
+    }
 }

@@ -1,6 +1,37 @@
-{
-  "id": "0",
-  "artist": "Hello",
-  "album": "Hello",
-  "date": "Hello"
-}
+[
+  {
+    "id": 0,
+    "artist": "",
+    "album": "",
+    "date": "",
+    "imgs": ["/assets/Add_Record_Button.jpg"]
+  },
+  {
+    "id": 1,
+    "artist": "Prince",
+    "album": "Purple Rain",
+    "date": "1984",
+    "imgs": ["/assets/Purple_Rain.jpg","/assets/Purple_Rain_Back.jpg"]
+  },
+  {
+    "id": 2,
+    "artist": "Finneas",
+    "album": "Blood Harmony",
+    "date": "2019",
+    "imgs": ["/assets/Blood_Harmony.png","/assets/Blood_Harmony_Back.jpg"]
+  },
+  {
+    "id": 3,
+    "artist": "Eagles",
+    "album": "Hotel California",
+    "date": "1976",
+    "imgs": ["/assets/Hotel_California.jpg","/assets/Hotel_California_Back.jpg"]
+  },
+  {
+    "id": 4,
+    "artist": "Eagles",
+    "album": "Eagles",
+    "date": "1972",
+    "imgs": ["/assets/Eagles.jpeg"]
+  }
+]

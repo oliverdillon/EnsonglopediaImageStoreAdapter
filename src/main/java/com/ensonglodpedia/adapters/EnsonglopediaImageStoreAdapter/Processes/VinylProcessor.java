@@ -1,16 +1,20 @@
 package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+
+import java.util.List;
 
 public class VinylProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         String json = exchange.getMessage().getBody(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
-        Vinyl vinyl = objectMapper.readValue(json, Vinyl.class);
-        exchange.getMessage().setBody(vinyl);
-        System.out.println(vinyl.getAlbum());
+        List<Vinyl> vinyls = objectMapper.readValue(json, new TypeReference<List<Vinyl>>(){});
+        exchange.getMessage().setBody(vinyls);
+        System.out.println(vinyls.get(1).getAlbum());
+        System.out.println(vinyls.get(1).getImgs().get(0));
     }
 }
