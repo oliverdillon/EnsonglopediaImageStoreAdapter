@@ -1,21 +1,14 @@
 package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Routes;
 
 import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.FileProcessor;
-import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.ImagePojo;
 import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.SimpleLoggingProcessor;
 import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.Vinyl;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jackson.ListJacksonDataFormat;
-import org.apache.camel.converter.jaxb.JaxbDataFormat;
-import org.apache.camel.spi.DataFormat;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 
-import javax.xml.bind.JAXBContext;
-
-@Component
+//@Component
 public class WebserverRoute extends RouteBuilder {
     private final Environment env;
 
@@ -40,8 +33,10 @@ public class WebserverRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(ImagePojo.class);
-        DataFormat dataFormat = new JaxbDataFormat(jaxbContext);
+        // enable Jackson json type converter
+        getContext().getGlobalOptions().put("CamelJacksonEnableTypeConverter", "true");
+        // allow Jackson json to convert to pojo types also (by default jackson only converts to String and other simple types)
+        getContext().getGlobalOptions().put("CamelJacksonTypeConverterToPojo", "true");
 
         restConfiguration()
                 .contextPath(env.getProperty("camel.component.servlet.mapping.contextPath", "/rest/*"))
@@ -59,14 +54,13 @@ public class WebserverRoute extends RouteBuilder {
                 .end();
         rest("/vinyls")
                 .get().route()
+//                .streamCaching()
                 .process(new SimpleLoggingProcessor())
-//                .transform(simple("files/images/data.json",java.io.File.class))
-//                .setBody(simple("resource:file:/files/images/data.json"))
-//                .process(new SimpleLoggingProcessor()).marshal().json()
-//                .log("${body}")
-//                .process(new FileProcessor())
-//                .unmarshal(new ListJacksonDataFormat(Vinyl.class))
-
+//                .transform(simple("files/input/data.json",java.io.File.class))
+                .setBody(simple("file:files/input/?fileName=data.json"))
+                .marshal(new ListJacksonDataFormat(Vinyl.class))
+                .log("Check message: ${body}")
+                .process(new FileProcessor())
                 .end();
 //                .log("${body}")
 //                .unmarshal(new ListJacksonDataFormat(Vinyl.class))

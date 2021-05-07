@@ -1,25 +1,35 @@
 package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Routes;
 
-import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.ImagePojo;
-import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.SimpleFileProcessor;
-import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.StreamProcessor;
+import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.VinylProcessor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.converter.jaxb.JaxbDataFormat;
-import org.apache.camel.spi.DataFormat;
+import org.springframework.stereotype.Component;
 
-import javax.xml.bind.JAXBContext;
-//@Component
+import java.util.logging.Logger;
+
+@Component
 public class MyFileRouter extends RouteBuilder {
+    private final static Logger LOGGER = Logger.getLogger(MyFileRouter.class.getName());
     @Override
     public void configure() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(ImagePojo.class);
-        DataFormat dataFormat = new JaxbDataFormat(jaxbContext);
-        from("file:files/input/?fileName=Hotel_California_Back.jpeg&noop=true")
-                .process(new SimpleFileProcessor())
-                .streamCaching()
-                .process(new StreamProcessor())
+        getContext().getGlobalOptions().put("CamelJacksonEnableTypeConverter", "true");
+        // allow Jackson json to convert to pojo types also (by default jackson only converts to String and other simple types)
+        getContext().getGlobalOptions().put("CamelJacksonTypeConverterToPojo", "true");
+
+        from("file:files/input/?fileName=data.json&noop=true")
+                .convertBodyTo(String.class)
+                .process(new VinylProcessor())
+                .convertBodyTo(String.class)
+                .to("mock:result").end();
+
+//                .log("Check message: ${body}")
+//                .end();
+
+//        from("file:files/input/?fileName=Hotel_California_Back.jpeg&noop=true")
+//                .process(new SimpleFileProcessor())
+//                .streamCaching()
+//                .process(new StreamProcessor())
 //                .log("${body}")
-                .to("mock:result")
-                .to("file:files/output/?fileName=Hotel_California_Back_NEW.jpeg");
+//                .to("mock:result")
+//                .to("file:files/output/?fileName=Hotel_California_Back_NEW.jpeg");
     }
 }

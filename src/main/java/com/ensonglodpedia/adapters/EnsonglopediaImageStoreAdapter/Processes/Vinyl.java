@@ -1,20 +1,19 @@
 package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes;
 
 import java.time.Instant;
-import java.util.List;
 
 public class Vinyl {
-    private int id;
+    private String id;
     private String artist;
     private String album;
-    private Instant date;
-    private List<String> imgs;
+    private String date;
+//    private List<String> imgs;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -34,19 +33,19 @@ public class Vinyl {
         this.album = album;
     }
 
-    public Instant getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Instant date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public List<String> getImgs() {
-        return imgs;
-    }
-
-    public void setImgs(List<String> imgs) {
-        this.imgs = imgs;
-    }
+//    public List<String> getImgs() {
+//        return imgs;
+//    }
+//
+//    public void setImgs(List<String> imgs) {
+//        this.imgs = imgs;
+//    }
 }
