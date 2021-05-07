@@ -1,8 +1,6 @@
 package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.endpoint;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,16 +18,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class HttpRequestTest {
 
-    private static final String AUTH_SUCCEEDED = "{"
+    private static final String OPERATION_SUCCEEDED = "{"
             + "\"success\": true,"
-            + "\"message\": \"Authentication succeeded.\""
+            + "\"message\": \"Operation succeeded.\""
             + "\"token\": \"%s\""
             + "}";
 
@@ -43,36 +39,69 @@ public class HttpRequestTest {
     @BeforeEach
     public void clearDirectories(){
         List<File> filesToDelete = new LinkedList<>();
-        filesToDelete.add( new File("files/images/MyFile.jpg"));
-        filesToDelete.add( new File("files/text/MyFile.txt"));
-        filesToDelete.forEach(file -> file.delete());
+        File imageDirectory = new File("files/images");
+        File[] imageFiles = imageDirectory.listFiles();
+        File textDirectory = new File("files/text");
+        File[] textFiles = textDirectory.listFiles();
+        for(File file:imageFiles){
+            file.delete();
+        }
+        for(File file:textFiles){
+            file.delete();
+        }
     }
 
     @Test
     public void greetingShouldReturnDefaultMessage() throws Exception {
-        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/rest/ping",
-                String.class)).contains(AUTH_SUCCEEDED);
+        String check = this.restTemplate.getForObject("http://localhost:" + port + "/rest/ping",
+                String.class);
+        assertThat(check).contains(OPERATION_SUCCEEDED);
     }
 
     @Test
     public void postTextShouldReturnDefaultMessage() throws Exception {
         File textFile = new File("files/input/Test_File.txt");
         byte[] bytes = FileUtils.readFileToByteArray(textFile);
+        String fileName = "Hello";
+
         headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.add("FileName",fileName);
         HttpEntity request = new HttpEntity(bytes, headers);
 
-        String check = this.restTemplate.postForObject("http://localhost:" + port + "/rest/text",request,String.class);
+        String check = this.restTemplate.postForObject("http://localhost:" + port + "/rest/text",
+                request,String.class);
+        assertThat(check).contains(OPERATION_SUCCEEDED);
+
+        Thread.sleep(10_000L);
+        File storedFile = new File("files/text/"+fileName+".txt");
+        assertTrue(storedFile.exists());
     }
 
     @Test
     public void postImageShouldReturnDefaultMessage() throws Exception {
-        File textFile = new File("files/input/Hotel_California_Back.jpeg");
-        byte[] bytes = FileUtils.readFileToByteArray(textFile);
+        File imageFile = new File("files/input/Hotel_California_Back.jpeg");
+        byte[] bytes = FileUtils.readFileToByteArray(imageFile);
+        String fileName = "Hotel_California_Back";
+
         headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.add("FileName",fileName);
         HttpEntity request = new HttpEntity(bytes, headers);
 
-        String check = this.restTemplate.postForObject("http://localhost:" + port + "/rest/images",request,String.class);
+        String check = this.restTemplate.postForObject("http://localhost:" + port + "/rest/images",
+                request,String.class);
+        assertThat(check).contains(OPERATION_SUCCEEDED);
+
+        Thread.sleep(10_000L);
+        File storedFile = new File("files/images/"+fileName+".jpeg");
+        assertTrue(storedFile.exists());
+    }
+
+    @Test
+    public void getVinylShouldReturnDefaultMessage() throws Exception {
+        String check = this.restTemplate.getForObject("http://localhost:" + port + "/rest/vinyls",String.class);
+        System.out.println(check);
+        assertThat(check).contains(OPERATION_SUCCEEDED);
     }
 }
