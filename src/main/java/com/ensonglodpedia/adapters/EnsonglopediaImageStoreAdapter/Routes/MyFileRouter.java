@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.logging.Logger;
 
-@Component
+//@Component
 public class MyFileRouter extends RouteBuilder {
     private final static Logger LOGGER = Logger.getLogger(MyFileRouter.class.getName());
     @Override
@@ -18,7 +18,6 @@ public class MyFileRouter extends RouteBuilder {
         from("file:files/input/?fileName=data.json&noop=true")
                 .convertBodyTo(String.class)
                 .process(new VinylProcessor())
-                .convertBodyTo(String.class)
                 .to("mock:result").end();
 
 //                .log("Check message: ${body}")

@@ -14,7 +14,5 @@ public class VinylProcessor implements Processor {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Vinyl> vinyls = objectMapper.readValue(json, new TypeReference<List<Vinyl>>(){});
         exchange.getMessage().setBody(vinyls);
-        System.out.println(vinyls.get(1).getAlbum());
-        System.out.println(vinyls.get(1).getImgs().get(0));
     }
 }

@@ -3,12 +3,14 @@ package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Routes;
 import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.FileProcessor;
 import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.SimpleLoggingProcessor;
 import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.Vinyl;
+import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.VinylProcessor;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jackson.ListJacksonDataFormat;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class WebserverRoute extends RouteBuilder {
     private final Environment env;
 
@@ -54,18 +56,11 @@ public class WebserverRoute extends RouteBuilder {
                 .end();
         rest("/vinyls")
                 .get().route()
-//                .streamCaching()
                 .process(new SimpleLoggingProcessor())
-//                .transform(simple("files/input/data.json",java.io.File.class))
-                .setBody(simple("file:files/input/?fileName=data.json"))
-                .marshal(new ListJacksonDataFormat(Vinyl.class))
-                .log("Check message: ${body}")
-                .process(new FileProcessor())
+                .transform(simple("files/input/data.json",java.io.File.class))
+                .convertBodyTo(String.class)
+                .process(new VinylProcessor())
                 .end();
-//                .log("${body}")
-//                .unmarshal(new ListJacksonDataFormat(Vinyl.class))
-//                .process(new SimpleLoggingProcessor())
-//                .marshal().json()
 
 
         rest("/images")

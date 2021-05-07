@@ -4,17 +4,18 @@ import java.time.Instant;
 import java.util.List;
 
 public class Vinyl {
-    private String id;
+    private int id;
+
     private String artist;
     private String album;
     private String date;
     private List<String> imgs;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -48,5 +49,16 @@ public class Vinyl {
 
     public void setImgs(List<String> imgs) {
         this.imgs = imgs;
+    }
+
+    @Override
+    public String toString() {
+        return "Vinyl{" +
+                "id=" + id +
+                ", artist='" + artist + '\'' +
+                ", album='" + album + '\'' +
+                ", date='" + date + '\'' +
+                ", imgs=" + imgs +
+                '}';
     }
 }
