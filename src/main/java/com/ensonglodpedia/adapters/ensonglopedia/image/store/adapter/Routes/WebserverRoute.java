@@ -39,7 +39,11 @@ public class WebserverRoute extends RouteBuilder {
                 .apiProperty("api.version", "1.0")
                 .apiProperty("cors", "true")
                 .apiContextRouteId("doc-api")
-                .port(env.getProperty("server.port", "8080"));
+                .port(env.getProperty("server.port", "8080"))
+                .enableCORS(true) // <-- Important
+                .corsAllowCredentials(true) // <-- Important
+                .corsHeaderProperty("Access-Control-Allow-Origin","http://localhost:4200")
+                .corsHeaderProperty("Access-Control-Allow-Headers","Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");;
 
         rest("/ping")
                 .get().route()
