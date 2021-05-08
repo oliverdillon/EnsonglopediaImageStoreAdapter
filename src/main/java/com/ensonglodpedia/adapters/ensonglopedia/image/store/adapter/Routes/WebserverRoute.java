@@ -50,21 +50,13 @@ public class WebserverRoute extends RouteBuilder {
                 .produces(MediaType.APPLICATION_JSON_VALUE)
                 .get()
                     .route()
-                    .setProperty("Log", constant("Retrieving vinyl data"))
-                    .process(new SimpleLoggingProcessor())
-                    .transform(simple("files/input/data.json",java.io.File.class))
-                    .convertBodyTo(String.class)
-                    .process(new VinylProcessor())
-//                    .marshal(vinylRequestDataFormat)
-                    .log("${body.getData().get(1).getArtist()}")
-                    .marshal().json(JsonLibrary.Jackson)
+                    .to("direct:getVinylsEndpoint")
                 .endRest()
 
                 .post().type(VinylsResponse.class)
                     .route()
-                    .setProperty("Log", constant("Retrieving vinyl data"))
-                    .process(new SimpleLoggingProcessor())
-                    .convertBodyTo(String.class);
+                    .to("direct:postVinylsEndpoint")
+                    .endRest();
 
         rest("/images")
                 .consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
