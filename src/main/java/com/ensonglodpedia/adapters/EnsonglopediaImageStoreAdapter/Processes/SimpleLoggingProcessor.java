@@ -10,6 +10,7 @@ public class SimpleLoggingProcessor implements Processor {
 
     @Override
     public void process(Exchange exchange) throws Exception {
-        logger.info("SimpleLoggingProcessor");
+        String message = exchange.getProperty("Log", String.class);
+        logger.info("SimpleLoggingProcessor: {}",message);
     }
 }

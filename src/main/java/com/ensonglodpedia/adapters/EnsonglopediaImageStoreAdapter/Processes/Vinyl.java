@@ -4,8 +4,8 @@ import java.time.Instant;
 import java.util.List;
 
 public class Vinyl {
-    private int id;
 
+    private int id;
     private String artist;
     private String album;
     private String date;
