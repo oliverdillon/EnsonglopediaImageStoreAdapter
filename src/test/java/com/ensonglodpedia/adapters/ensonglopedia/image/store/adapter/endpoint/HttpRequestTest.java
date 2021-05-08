@@ -1,6 +1,7 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.endpoint;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.AbstractTest;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,46 @@ public class HttpRequestTest extends AbstractTest {
             + "\"message\": \"Operation succeeded.\""
             + "\"token\": \"%s\""
             + "}";
+
+    private String expectedContent = "{\n" +
+            "  \"data\":[\n" +
+            "    {\n" +
+            "      \"id\": 0,\n" +
+            "      \"artist\": \"\",\n" +
+            "      \"album\": \"\",\n" +
+            "      \"date\": \"\",\n" +
+            "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"id\": 1,\n" +
+            "      \"artist\": \"Prince\",\n" +
+            "      \"album\": \"Purple Rain\",\n" +
+            "      \"date\": \"1984\",\n" +
+            "      \"imgs\": [\"/assets/Purple_Rain.jpg\",\"/assets/Purple_Rain_Back.jpg\"]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"id\": 2,\n" +
+            "      \"artist\": \"Finneas\",\n" +
+            "      \"album\": \"Blood Harmony\",\n" +
+            "      \"date\": \"2019\",\n" +
+            "      \"imgs\": [\"/assets/Blood_Harmony.png\",\"/assets/Blood_Harmony_Back.jpg\"]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"id\": 3,\n" +
+            "      \"artist\": \"Eagles\",\n" +
+            "      \"album\": \"Hotel California\",\n" +
+            "      \"date\": \"1976\",\n" +
+            "      \"imgs\": [\"/assets/Hotel_California.jpg\",\"/assets/Hotel_California_Back.jpg\"]\n" +
+            "    },\n" +
+            "    {\n" +
+            "      \"id\": 4,\n" +
+            "      \"artist\": \"Eagles\",\n" +
+            "      \"album\": \"Eagles\",\n" +
+            "      \"date\": \"1972\",\n" +
+            "      \"imgs\": [\"/assets/Eagles.jpeg\"]\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
 
     @LocalServerPort
     private int port;
@@ -106,11 +147,14 @@ public class HttpRequestTest extends AbstractTest {
         String response = this.restTemplate.getForObject("http://localhost:" + port + "/rest/vinyls",String.class);
 
         String fileName = "input/data.json";
-        String expectedContent = getStringFromResource(fileName)
+//        getStringFromResource(fileName)
+        expectedContent = expectedContent
                 .replaceAll("[\t\r\n]","")
                 .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
 
         ObjectMapper objectMapper = new ObjectMapper();
-        assertEquals(objectMapper.readTree(expectedContent),objectMapper.readTree(response));
+        JsonNode expectedNode = objectMapper.readTree(expectedContent);
+        JsonNode responseNode = objectMapper.readTree(response);
+        assertEquals(expectedNode, responseNode);
     }
 }

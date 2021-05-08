@@ -1,8 +1,12 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.Vinyls;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylsResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.jackson.JacksonDataFormat;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -34,6 +38,9 @@ public class WebserverRoute extends RouteBuilder {
         // allow Jackson json to convert to pojo types also (by default jackson only converts to String and other simple types)
         getContext().getGlobalOptions().put("CamelJacksonTypeConverterToPojo", "true");
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        JacksonDataFormat getVinylRequest= new JacksonDataFormat(objectMapper, VinylsResponse.class);
+
         restConfiguration()
                 .contextPath(env.getProperty("camel.component.servlet.mapping.contextPath", "/rest/*"))
                 .apiContextPath("/api-doc")
@@ -51,17 +58,20 @@ public class WebserverRoute extends RouteBuilder {
                 .end();
 
         rest("/vinyls")
+                .produces(MediaType.APPLICATION_JSON_VALUE)
                 .get()
                     .route()
                     .setProperty("Log", constant("Retrieving vinyl data"))
                     .process(new SimpleLoggingProcessor())
                     .transform(simple("files/input/data.json",java.io.File.class))
                     .convertBodyTo(String.class)
-//                    .process(new VinylProcessor())
-                    .marshal().json(Vinyls.class)
+                    .process(new VinylProcessor())
+//                    .marshal(getVinylRequest)
+                    .log("${body.getData().get(1).getArtist()}")
+                    .marshal().json(JsonLibrary.Jackson)
                 .endRest()
 
-                .post().type(Vinyls.class)
+                .post().type(VinylsResponse.class)
                     .route()
                     .setProperty("Log", constant("Retrieving vinyl data"))
                     .process(new SimpleLoggingProcessor())

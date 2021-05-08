@@ -12,7 +12,8 @@ public class VinylProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         String json = exchange.getMessage().getBody(String.class);
         ObjectMapper objectMapper = new ObjectMapper();
-        List<Vinyl> vinyls = objectMapper.readValue(json, new TypeReference<List<Vinyl>>(){});
+        VinylsResponse vinyls = objectMapper.readValue(json, VinylsResponse.class);
         exchange.getMessage().setBody(vinyls);
+        System.out.println(vinyls.getData().get(1).getArtist());
     }
 }
