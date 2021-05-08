@@ -82,7 +82,6 @@ public class HttpRequestTest extends AbstractTest {
 
     @BeforeEach
     public void clearDirectories(){
-        List<File> filesToDelete = new LinkedList<>();
         File imageDirectory = new File("files/images");
         File[] imageFiles = imageDirectory.listFiles();
         File textDirectory = new File("files/text");

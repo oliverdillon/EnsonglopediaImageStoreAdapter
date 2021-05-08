@@ -4,12 +4,13 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -18,10 +19,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-@AutoConfigureMockMvc
-public class TextEnpointTest {
+@ContextConfiguration
+public class ImagesEndpointTest {
 
-    @EndpointInject("mock:text")
+    @EndpointInject("mock:images")
     protected MockEndpoint ping;
 
     @Autowired
@@ -36,9 +37,9 @@ public class TextEnpointTest {
 
     @BeforeEach
     public void clearDirectories(){
-        File textDirectory = new File("files/text");
-        File[] textFiles = textDirectory.listFiles();
-        for(File file:textFiles){
+        File imageDirectory = new File("files/images");
+        File[] imageFiles = imageDirectory.listFiles();
+        for(File file:imageFiles){
             file.delete();
         }
     }
@@ -46,17 +47,17 @@ public class TextEnpointTest {
     @Test
     @DirtiesContext
     public void shouldReturnDefaultMessage() throws Exception {
-        String fileName = "Test_File";
-        File imageFile = new File("files/input/"+fileName+".txt");
+        String fileName = "Hotel_California_Back";
+        File imageFile = new File("files/input/"+fileName+".jpeg");
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
 
         ping.expectedBodiesReceived(OPERATION_SUCCEEDED);
-        template.setDefaultEndpointUri("direct:textEndpoint");
+        template.setDefaultEndpointUri("direct:imagesEndpoint");
         template.sendBodyAndHeader(bytes,"Filename",fileName);
         ping.assertIsSatisfied();
 
         Thread.sleep(10_000L);
-        File storedFile = new File("files/text/"+fileName+".txt");
+        File storedFile = new File("files/images/"+fileName+".jpeg");
         assertTrue(storedFile.exists());
     }
 }

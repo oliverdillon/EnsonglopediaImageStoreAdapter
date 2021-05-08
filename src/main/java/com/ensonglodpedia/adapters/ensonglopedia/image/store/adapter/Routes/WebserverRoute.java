@@ -19,6 +19,7 @@ public class WebserverRoute extends RouteBuilder {
 
     public WebserverRoute(Environment env) {
         this.env = env;
+
     }
 
     @Override
@@ -70,18 +71,15 @@ public class WebserverRoute extends RouteBuilder {
                 .consumes(MediaType.IMAGE_JPEG_VALUE)
                 .produces(MediaType.IMAGE_JPEG_VALUE)
                 .post().route()
-                .setProperty("Log", constant("Storing vinyl data"))
-                .process(new SimpleLoggingProcessor())
-                .to("file:files/images?fileName=${header.FileName}.jpeg")
-                .setBody(constant(OPERATION_SUCCEEDED)).endRest();
+                .to("direct:imagesEndpoint")
+                .endRest();
 
         rest("/text")
                 .consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .consumes(MediaType.TEXT_PLAIN_VALUE)
                 .produces(MediaType.TEXT_PLAIN_VALUE)
                 .post().route()
-                .process(new SimpleLoggingProcessor())
-                .to("file:files/text?fileName=${header.FileName}.txt")
-                .setBody(constant(OPERATION_SUCCEEDED)).endRest();
+                .to("direct:textEndpoint")
+                .endRest();
     }
 }
