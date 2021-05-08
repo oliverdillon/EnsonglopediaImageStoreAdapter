@@ -11,6 +11,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.OPERATION_SUCCEEDED;
+
 @Component
 public class WebserverRoute extends RouteBuilder {
     private final Environment env;
@@ -18,18 +20,6 @@ public class WebserverRoute extends RouteBuilder {
     public WebserverRoute(Environment env) {
         this.env = env;
     }
-
-    private static final String AUTH_SUCCEEDED = "{"
-            + "\"success\": true,"
-            + "\"message\": \"Authentication succeeded.\""
-            + "\"token\": \"%s\""
-            + "}";
-
-    private static final String OPERATION_SUCCEEDED = "{"
-            + "\"success\": true,"
-            + "\"message\": \"Operation succeeded.\""
-            + "\"token\": \"%s\""
-            + "}";
 
     @Override
     public void configure() throws Exception {
@@ -39,7 +29,7 @@ public class WebserverRoute extends RouteBuilder {
         getContext().getGlobalOptions().put("CamelJacksonTypeConverterToPojo", "true");
 
         ObjectMapper objectMapper = new ObjectMapper();
-        JacksonDataFormat getVinylRequest= new JacksonDataFormat(objectMapper, VinylsResponse.class);
+        JacksonDataFormat vinylRequestDataFormat= new JacksonDataFormat(objectMapper, VinylsResponse.class);
 
         restConfiguration()
                 .contextPath(env.getProperty("camel.component.servlet.mapping.contextPath", "/rest/*"))
@@ -52,10 +42,8 @@ public class WebserverRoute extends RouteBuilder {
 
         rest("/ping")
                 .get().route()
-                .setProperty("Log", constant("Pinging route"))
-                .process(new SimpleLoggingProcessor())
-                .setBody(constant(OPERATION_SUCCEEDED))
-                .end();
+                .to("direct:pingEndpoint")
+                .endRest();
 
         rest("/vinyls")
                 .produces(MediaType.APPLICATION_JSON_VALUE)
@@ -66,7 +54,7 @@ public class WebserverRoute extends RouteBuilder {
                     .transform(simple("files/input/data.json",java.io.File.class))
                     .convertBodyTo(String.class)
                     .process(new VinylProcessor())
-//                    .marshal(getVinylRequest)
+//                    .marshal(vinylRequestDataFormat)
                     .log("${body.getData().get(1).getArtist()}")
                     .marshal().json(JsonLibrary.Jackson)
                 .endRest()

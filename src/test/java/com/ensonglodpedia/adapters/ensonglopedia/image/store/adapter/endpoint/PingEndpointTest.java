@@ -1,42 +1,42 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.endpoint;
-import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.junit.jupiter.api.Test;
 
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 @ContextConfiguration
 public class PingEndpointTest {
 
-    @Autowired
-    protected CamelContext camelContext;
+//    @Autowired
+//    protected CamelContext camelContext;
 
     @EndpointInject("mock:ping")
     protected MockEndpoint ping;
 
+    @Autowired
+    ProducerTemplate template;
 
-    private static final String AUTH_SUCCEEDED = "{"
+    private static final String OPERATION_SUCCEEDED = "{"
             + "\"success\": true,"
-            + "\"message\": \"Authentication succeeded.\""
+            + "\"message\": \"Operation succeeded.\""
             + "\"token\": \"%s\""
             + "}";
 
-//    @Test
-//    public void shouldReturnDefaultMessage() throws Exception {
-//        this.mockMvc.perform(get("/rest/ping")).andDo(print()).andExpect(status().isOk())
-//                .andExpect(content().string(containsString(AUTH_SUCCEEDED)));
-//    }
+    @Test
+    @DirtiesContext
+    public void shouldReturnDefaultMessage() throws Exception {
+        ping.expectedBodiesReceived(OPERATION_SUCCEEDED);
+        template.sendBody("direct:pingEndpoint",null);
+        ping.assertIsSatisfied();
+    }
 }
