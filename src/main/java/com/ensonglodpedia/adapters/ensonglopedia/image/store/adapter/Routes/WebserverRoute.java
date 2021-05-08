@@ -1,11 +1,8 @@
-package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Routes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
 
-import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.SimpleLoggingProcessor;
-import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.Vinyl;
-import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.VinylProcessor;
-import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.Vinyls;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.Vinyls;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.jackson.ListJacksonDataFormat;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

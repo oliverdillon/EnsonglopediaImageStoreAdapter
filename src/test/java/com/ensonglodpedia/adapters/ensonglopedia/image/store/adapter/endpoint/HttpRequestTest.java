@@ -1,5 +1,7 @@
-package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.endpoint;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.endpoint;
 
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.AbstractTest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +20,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class HttpRequestTest {
+public class HttpRequestTest extends AbstractTest {
 
     private static final String OPERATION_SUCCEEDED = "{"
             + "\"success\": true,"
@@ -100,8 +103,14 @@ public class HttpRequestTest {
 
     @Test
     public void getVinylShouldReturnDefaultMessage() throws Exception {
-        String check = this.restTemplate.getForObject("http://localhost:" + port + "/rest/vinyls",String.class);
-        System.out.println(check);
-//        assertThat(check).contains(OPERATION_SUCCEEDED);
+        String response = this.restTemplate.getForObject("http://localhost:" + port + "/rest/vinyls",String.class);
+
+        String fileName = "input/data.json";
+        String expectedContent = getStringFromResource(fileName)
+                .replaceAll("[\t\r\n]","")
+                .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        assertEquals(objectMapper.readTree(expectedContent),objectMapper.readTree(response));
     }
 }

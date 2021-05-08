@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

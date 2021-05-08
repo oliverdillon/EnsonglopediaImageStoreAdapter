@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.endpoint;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.endpoint;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;

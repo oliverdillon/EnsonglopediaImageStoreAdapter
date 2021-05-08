@@ -1,6 +1,5 @@
-package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes;
 
-import java.time.Instant;
 import java.util.List;
 
 public class Vinyl {

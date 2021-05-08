@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

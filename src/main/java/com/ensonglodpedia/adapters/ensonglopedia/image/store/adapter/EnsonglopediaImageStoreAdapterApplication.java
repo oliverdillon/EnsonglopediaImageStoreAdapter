@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

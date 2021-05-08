@@ -1,8 +1,7 @@
-package com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Routes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
 
-import com.ensonglodpedia.adapters.EnsonglopediaImageStoreAdapter.Processes.VinylProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylProcessor;
 import org.apache.camel.builder.RouteBuilder;
-import org.springframework.stereotype.Component;
 
 import java.util.logging.Logger;
 
