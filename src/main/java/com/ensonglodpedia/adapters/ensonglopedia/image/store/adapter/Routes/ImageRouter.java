@@ -13,7 +13,8 @@ public class ImageRouter extends RouteBuilder {
         from("direct:imagesEndpoint")
                 .setProperty("Log", constant("Storing vinyl data"))
                 .process(new SimpleLoggingProcessor())
-                .to("file:files/images?fileName=${header.FileName}.jpeg")
+                .log("${header.Filename}")
+                .to("file:files/images?fileName=${header.Filename}.jpeg")
                 .setBody(constant(OPERATION_SUCCEEDED))
                 .to("mock:images");
     }
