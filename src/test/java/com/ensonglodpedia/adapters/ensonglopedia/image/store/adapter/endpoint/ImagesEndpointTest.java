@@ -4,7 +4,6 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class ImagesEndpointTest {
 
     @EndpointInject("mock:images")
-    protected MockEndpoint ping;
+    protected MockEndpoint imageMock;
 
     @Autowired
     ProducerTemplate template;
@@ -51,13 +48,43 @@ public class ImagesEndpointTest {
         File imageFile = new File("files/input/"+fileName+".jpeg");
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
 
-        ping.expectedBodiesReceived(OPERATION_SUCCEEDED);
+        imageMock.expectedBodiesReceived(OPERATION_SUCCEEDED);
         template.setDefaultEndpointUri("direct:imagesEndpoint");
         template.sendBodyAndHeader(bytes,"Filename",fileName);
-        ping.assertIsSatisfied();
+        imageMock.assertIsSatisfied();
 
         Thread.sleep(10_000L);
         File storedFile = new File("files/images/"+fileName+".jpeg");
         assertTrue(storedFile.exists());
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldSaveWithCorrectExtension() throws Exception {
+        String fileName = "Blood_Harmony.png";
+        File imageFile = new File("files/input/"+fileName);
+        byte[] bytes = FileUtils.readFileToByteArray(imageFile);
+
+        imageMock.expectedBodiesReceived(OPERATION_SUCCEEDED);
+        template.setDefaultEndpointUri("direct:imagesEndpoint");
+        template.sendBodyAndHeader(bytes,"Filename",fileName);
+        imageMock.assertIsSatisfied();
+
+        Thread.sleep(10_000L);
+        File storedFile = new File("files/images/"+fileName);
+        assertTrue(storedFile.exists());
+    }
+
+    @Test
+    @DirtiesContext
+    public void shouldNotSaveWithIncorrectExtension() throws Exception {
+        String fileName = "Blood_Harmony.ttt";
+        File imageFile = new File("files/input/"+fileName);
+        byte[] bytes = FileUtils.readFileToByteArray(imageFile);
+
+        imageMock.expectedBodiesReceived("{Unknown file extension}");
+        template.setDefaultEndpointUri("direct:imagesEndpoint");
+        template.sendBodyAndHeader(bytes,"Filename",fileName);
+        imageMock.assertIsSatisfied();
     }
 }

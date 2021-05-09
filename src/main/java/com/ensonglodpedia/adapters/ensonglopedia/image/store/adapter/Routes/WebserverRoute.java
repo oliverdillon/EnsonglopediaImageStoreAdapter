@@ -1,17 +1,10 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylsResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.jackson.JacksonDataFormat;
-import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-
-import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.OPERATION_SUCCEEDED;
 
 @Component
 public class WebserverRoute extends RouteBuilder {
@@ -19,7 +12,6 @@ public class WebserverRoute extends RouteBuilder {
 
     public WebserverRoute(Environment env) {
         this.env = env;
-
     }
 
     @Override
@@ -28,9 +20,6 @@ public class WebserverRoute extends RouteBuilder {
         getContext().getGlobalOptions().put("CamelJacksonEnableTypeConverter", "true");
         // allow Jackson json to convert to pojo types also (by default jackson only converts to String and other simple types)
         getContext().getGlobalOptions().put("CamelJacksonTypeConverterToPojo", "true");
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        JacksonDataFormat vinylRequestDataFormat= new JacksonDataFormat(objectMapper, VinylsResponse.class);
 
         restConfiguration()
                 .contextPath(env.getProperty("camel.component.servlet.mapping.contextPath", "/rest/*"))

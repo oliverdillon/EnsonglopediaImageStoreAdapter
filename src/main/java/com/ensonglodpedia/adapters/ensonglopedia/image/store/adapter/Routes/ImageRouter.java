@@ -14,8 +14,16 @@ public class ImageRouter extends RouteBuilder {
                 .setProperty("Log", constant("Storing vinyl data"))
                 .process(new SimpleLoggingProcessor())
                 .log("${header.Filename}")
-                .to("file:files/images?fileName=${header.Filename}.jpeg")
-                .setBody(constant(OPERATION_SUCCEEDED))
+                .choice()
+                    .when(header("filename").regex("^.*\\.(jpg|jpeg|JPG|png)$"))
+                        .to("file:files/images?fileName=${header.Filename}")
+                        .setBody(constant(OPERATION_SUCCEEDED))
+                    .when(header("filename").regex("^.*\\..*$"))
+                        .setBody(constant("{Unknown file extension}"))
+                    .otherwise()
+                        .to("file:files/images?fileName=${header.Filename}.jpeg")
+                        .setBody(constant(OPERATION_SUCCEEDED))
+                .end()
                 .to("mock:images");
     }
 }
