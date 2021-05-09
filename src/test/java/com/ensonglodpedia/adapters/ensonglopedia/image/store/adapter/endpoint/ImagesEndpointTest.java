@@ -12,6 +12,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.io.File;
+import java.io.FileWriter;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -43,13 +44,13 @@ public class ImagesEndpointTest {
 
     @Test
     @DirtiesContext
-    public void shouldReturnDefaultMessage() throws Exception {
+    public void postRequestShouldReturnDefaultMessage() throws Exception {
         String fileName = "Hotel_California_Back";
         File imageFile = new File("files/input/"+fileName+".jpeg");
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
 
         imageMock.expectedBodiesReceived(OPERATION_SUCCEEDED);
-        template.setDefaultEndpointUri("direct:imagesEndpoint");
+        template.setDefaultEndpointUri("direct:postImageEndpoint");
         template.sendBodyAndHeader(bytes,"Filename",fileName);
         imageMock.assertIsSatisfied();
 
@@ -60,13 +61,31 @@ public class ImagesEndpointTest {
 
     @Test
     @DirtiesContext
+    public void getRequestShouldReturnImage() throws Exception {
+        String fileName = "Hotel_California_Back.jpeg";
+        File imageFile = new File("files/input/"+fileName);
+        byte[] bytes = FileUtils.readFileToByteArray(imageFile);
+        File storedFile = new File("files/images/"+fileName);
+        FileUtils.writeByteArrayToFile(storedFile, bytes);
+        Thread.sleep(10_000L);
+        assertTrue(storedFile.exists());
+
+        imageMock.expectedBodiesReceived(bytes);
+        template.setDefaultEndpointUri("direct:getImageEndpoint");
+        template.sendBodyAndHeader(bytes,"Filename",fileName);
+        imageMock.assertIsSatisfied();
+
+    }
+
+    @Test
+    @DirtiesContext
     public void shouldSaveWithCorrectExtension() throws Exception {
         String fileName = "Blood_Harmony.png";
         File imageFile = new File("files/input/"+fileName);
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
 
         imageMock.expectedBodiesReceived(OPERATION_SUCCEEDED);
-        template.setDefaultEndpointUri("direct:imagesEndpoint");
+        template.setDefaultEndpointUri("direct:postImageEndpoint");
         template.sendBodyAndHeader(bytes,"Filename",fileName);
         imageMock.assertIsSatisfied();
 
@@ -83,7 +102,7 @@ public class ImagesEndpointTest {
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
 
         imageMock.expectedBodiesReceived("{Unknown file extension}");
-        template.setDefaultEndpointUri("direct:imagesEndpoint");
+        template.setDefaultEndpointUri("direct:postImageEndpoint");
         template.sendBodyAndHeader(bytes,"Filename",fileName);
         imageMock.assertIsSatisfied();
     }

@@ -10,10 +10,15 @@ import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.util
 public class ImageRouter extends RouteBuilder {
     @Override
     public void configure() throws Exception {
-        from("direct:imagesEndpoint")
-                .setProperty("Log", constant("Storing vinyl data"))
+        from("direct:getImageEndpoint")
+                .setProperty("Log", constant("Retrieving vinyl image data for: ${header.Filename}"))
                 .process(new SimpleLoggingProcessor())
-                .log("${header.Filename}")
+                .setBody(simple("files/images/${header.Filename}",java.io.File.class))
+                .to("mock:images");
+
+        from("direct:postImageEndpoint")
+                .setProperty("Log", constant("Storing vinyl image data for: ${header.Filename}"))
+                .process(new SimpleLoggingProcessor())
                 .choice()
                     .when(header("filename").regex("^.*\\.(jpg|jpeg|JPG|png)$"))
                         .to("file:files/images?fileName=${header.Filename}")

@@ -58,8 +58,11 @@ public class WebserverRoute extends RouteBuilder {
                 .consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
                 .consumes(MediaType.IMAGE_JPEG_VALUE)
                 .produces(MediaType.IMAGE_JPEG_VALUE)
+                .get().route()
+                .to("direct:getImageEndpoint")
+                .endRest()
                 .post().route()
-                .to("direct:imagesEndpoint")
+                .to("direct:postImageEndpoint")
                 .endRest();
 
         rest("/text")
