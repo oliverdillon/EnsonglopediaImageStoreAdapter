@@ -1,6 +1,6 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylRetrievalProcessor;
 import org.apache.camel.builder.RouteBuilder;
 
 import java.util.logging.Logger;
@@ -16,7 +16,7 @@ public class MyFileRouter extends RouteBuilder {
 
         from("file:files/input/?fileName=data.json&noop=true")
                 .convertBodyTo(String.class)
-                .process(new VinylProcessor())
+                .process(new VinylRetrievalProcessor())
                 .to("mock:result").end();
 
 //                .log("Check message: ${body}")

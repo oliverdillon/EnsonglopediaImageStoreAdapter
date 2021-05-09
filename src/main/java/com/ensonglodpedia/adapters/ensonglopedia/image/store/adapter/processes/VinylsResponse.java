@@ -16,4 +16,11 @@ public class VinylsResponse {
     public void setData(List<Vinyl> data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "data=" + data.toString() +
+                '}';
+    }
 }

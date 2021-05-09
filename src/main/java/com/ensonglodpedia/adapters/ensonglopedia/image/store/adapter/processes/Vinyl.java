@@ -52,7 +52,7 @@ public class Vinyl {
 
     @Override
     public String toString() {
-        return "Vinyl{" +
+        return "{" +
                 "id=" + id +
                 ", artist='" + artist + '\'' +
                 ", album='" + album + '\'' +

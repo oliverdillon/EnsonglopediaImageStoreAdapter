@@ -1,7 +1,8 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylRetrievalProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylStoreProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylsResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.builder.RouteBuilder;
@@ -21,16 +22,18 @@ public class VinylsRouter extends RouteBuilder {
                 .process(new SimpleLoggingProcessor())
                 .transform(simple("files/input/data.json",java.io.File.class))
                 .convertBodyTo(String.class)
-                .process(new VinylProcessor())
+                .process(new VinylRetrievalProcessor())
 //                    .marshal(vinylRequestDataFormat)
                 .log("${body.getData().get(1).getArtist()}")
                 .marshal().json(JsonLibrary.Jackson)
                 .to("mock:vinyls");
 
         from("direct:postVinylsEndpoint")
-                .setProperty("Log", constant("Retrieving vinyl data"))
+                .setProperty("Log", constant("Adding to vinyl data"))
                 .process(new SimpleLoggingProcessor())
-                .convertBodyTo(String.class)
+                .process(new VinylStoreProcessor())
+                .marshal().json(JsonLibrary.Jackson)
+                .to("file:files/input/?fileName=data.json")
                 .to("mock:vinyls");
     }
 }
