@@ -1,10 +1,12 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
 
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.MessageProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.OPERATION_SUCCEEDED;
+import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.IMAGE_DETAILS;
+import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.OPERATION_FAILURE;
 
 @Component
 public class ImageRouter extends RouteBuilder {
@@ -22,13 +24,14 @@ public class ImageRouter extends RouteBuilder {
                 .choice()
                     .when(header("filename").regex("^.*\\.(jpg|jpeg|JPG|png)$"))
                         .to("file:files/images?fileName=${header.Filename}")
-                        .setBody(constant(OPERATION_SUCCEEDED))
+                        .setBody(constant(IMAGE_DETAILS))
                     .when(header("filename").regex("^.*\\..*$"))
-                        .setBody(constant("{Unknown file extension}"))
+                        .setBody(constant(OPERATION_FAILURE))
                     .otherwise()
                         .to("file:files/images?fileName=${header.Filename}.jpeg")
-                        .setBody(constant(OPERATION_SUCCEEDED))
+                        .setBody(constant(IMAGE_DETAILS))
                 .end()
+                .process(new MessageProcessor())
                 .to("mock:images");
     }
 }

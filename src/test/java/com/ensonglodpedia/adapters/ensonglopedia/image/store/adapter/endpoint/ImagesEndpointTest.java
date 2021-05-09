@@ -12,7 +12,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.io.File;
-import java.io.FileWriter;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,12 +25,17 @@ public class ImagesEndpointTest {
     @Autowired
     ProducerTemplate template;
 
-    private static final String OPERATION_SUCCEEDED = "{"
+    private static final String IMAGE_DETAILS = "{"
             + "\"success\": true,"
             + "\"message\": \"Operation succeeded.\""
+            + "\"location\": \"REPLACE_ASSET_LOCATION\""
             + "\"token\": \"%s\""
             + "}";
-
+    private static final String OPERATION_FAILURE = "{"
+            + "\"success\": true,"
+            + "\"message\": \"Operation failure.\""
+            + "\"token\": \"%s\""
+            + "}";
 
     @BeforeEach
     public void clearDirectories(){
@@ -49,7 +53,9 @@ public class ImagesEndpointTest {
         File imageFile = new File("files/input/"+fileName+".jpeg");
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
 
-        imageMock.expectedBodiesReceived(OPERATION_SUCCEEDED);
+        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION","/assets/"+fileName+".jpeg");
+
+        imageMock.expectedBodiesReceived(imageDetails);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
         template.sendBodyAndHeader(bytes,"Filename",fileName);
         imageMock.assertIsSatisfied();
@@ -84,7 +90,9 @@ public class ImagesEndpointTest {
         File imageFile = new File("files/input/"+fileName);
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
 
-        imageMock.expectedBodiesReceived(OPERATION_SUCCEEDED);
+        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION","/assets/"+fileName);
+
+        imageMock.expectedBodiesReceived(imageDetails);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
         template.sendBodyAndHeader(bytes,"Filename",fileName);
         imageMock.assertIsSatisfied();
@@ -101,7 +109,7 @@ public class ImagesEndpointTest {
         File imageFile = new File("files/input/"+fileName);
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
 
-        imageMock.expectedBodiesReceived("{Unknown file extension}");
+        imageMock.expectedBodiesReceived(OPERATION_FAILURE);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
         template.sendBodyAndHeader(bytes,"Filename",fileName);
         imageMock.assertIsSatisfied();
