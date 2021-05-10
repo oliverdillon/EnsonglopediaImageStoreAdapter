@@ -27,14 +27,14 @@ public class ImagesEndpointTest {
 
     private static final String IMAGE_DETAILS = "{"
             + "\"success\": true,"
-            + "\"message\": \"Operation succeeded.\""
-            + "\"location\": \"REPLACE_ASSET_LOCATION\""
+            + "\"message\": \"Operation succeeded.\","
+            + "\"location\": \"REPLACE_ASSET_LOCATION\","
             + "\"token\": \"%s\""
             + "}";
     private static final String OPERATION_FAILURE = "{"
             + "\"success\": false,"
-            + "\"message\": \"Operation failure.\""
-            + "\"location\": \"\""
+            + "\"message\": \"Operation failure.\","
+            + "\"location\": \"\","
             + "\"token\": \"%s\""
             + "}";
 

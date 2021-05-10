@@ -28,7 +28,7 @@ public class PingEndpointTest {
 
     private static final String OPERATION_SUCCEEDED = "{"
             + "\"success\": true,"
-            + "\"message\": \"Operation succeeded.\""
+            + "\"message\": \"Operation succeeded.\","
             + "\"token\": \"%s\""
             + "}";
 

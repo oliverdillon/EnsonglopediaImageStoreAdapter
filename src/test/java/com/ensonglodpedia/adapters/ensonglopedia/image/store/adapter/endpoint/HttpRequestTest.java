@@ -38,14 +38,14 @@ public class HttpRequestTest extends AbstractTest {
 
     private static final String OPERATION_SUCCEEDED = "{"
             + "\"success\": true,"
-            + "\"message\": \"Operation succeeded.\""
+            + "\"message\": \"Operation succeeded.\","
             + "\"token\": \"%s\""
             + "}";
 
     private static final String IMAGE_DETAILS = "{"
             + "\"success\": true,"
-            + "\"message\": \"Operation succeeded.\""
-            + "\"location\": \"REPLACE_ASSET_LOCATION\""
+            + "\"message\": \"Operation succeeded.\","
+            + "\"location\": \"REPLACE_ASSET_LOCATION\","
             + "\"token\": \"%s\""
             + "}";
 
