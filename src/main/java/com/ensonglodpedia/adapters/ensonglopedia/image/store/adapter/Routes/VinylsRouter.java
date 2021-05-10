@@ -10,6 +10,8 @@ import org.apache.camel.component.jackson.JacksonDataFormat;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.stereotype.Component;
 
+import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.OPERATION_SUCCEEDED;
+
 @Component
 public class VinylsRouter extends RouteBuilder {
     @Override
@@ -24,7 +26,6 @@ public class VinylsRouter extends RouteBuilder {
                 .convertBodyTo(String.class)
                 .process(new VinylRetrievalProcessor())
 //                    .marshal(vinylRequestDataFormat)
-                .log("${body.getData().get(1).getArtist()}")
                 .marshal().json(JsonLibrary.Jackson)
                 .to("mock:vinyls");
 
@@ -34,6 +35,7 @@ public class VinylsRouter extends RouteBuilder {
                 .process(new VinylStoreProcessor())
                 .marshal().json(JsonLibrary.Jackson)
                 .to("file:files/input/?fileName=data.json")
+                .setBody(constant(OPERATION_SUCCEEDED))
                 .to("mock:vinyls");
     }
 }

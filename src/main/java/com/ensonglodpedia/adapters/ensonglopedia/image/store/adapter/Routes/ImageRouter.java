@@ -5,8 +5,8 @@ import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.S
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
 
-import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.IMAGE_DETAILS;
-import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.OPERATION_FAILURE;
+import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.IMAGE_POST_SUCCEEDED;
+import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.IMAGE_POST_FAILURE;
 
 @Component
 public class ImageRouter extends RouteBuilder {
@@ -24,12 +24,12 @@ public class ImageRouter extends RouteBuilder {
                 .choice()
                     .when(header("filename").regex("^.*\\.(jpg|jpeg|JPG|png)$"))
                         .to("file:files/images?fileName=${header.Filename}")
-                        .setBody(constant(IMAGE_DETAILS))
+                        .setBody(constant(IMAGE_POST_SUCCEEDED))
                     .when(header("filename").regex("^.*\\..*$"))
-                        .setBody(constant(OPERATION_FAILURE))
+                        .setBody(constant(IMAGE_POST_FAILURE))
                     .otherwise()
                         .to("file:files/images?fileName=${header.Filename}.jpeg")
-                        .setBody(constant(IMAGE_DETAILS))
+                        .setBody(constant(IMAGE_POST_SUCCEEDED))
                 .end()
                 .process(new MessageProcessor())
                 .to("mock:images");

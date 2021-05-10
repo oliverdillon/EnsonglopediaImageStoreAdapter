@@ -49,15 +49,12 @@ public class WebserverRoute extends RouteBuilder {
                     .to("direct:getVinylsEndpoint")
                 .endRest()
 
-                .post().type(VinylsResponse.class)
+                .post()
                     .route()
                     .to("direct:postVinylsEndpoint")
-                    .endRest();
+                .endRest();
 
         rest("/images")
-                .consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .consumes(MediaType.IMAGE_JPEG_VALUE)
-                .produces(MediaType.IMAGE_JPEG_VALUE)
                 .get().route()
                 .to("direct:getImageEndpoint")
                 .endRest()
@@ -66,9 +63,6 @@ public class WebserverRoute extends RouteBuilder {
                 .endRest();
 
         rest("/text")
-                .consumes(MediaType.MULTIPART_FORM_DATA_VALUE)
-                .consumes(MediaType.TEXT_PLAIN_VALUE)
-                .produces(MediaType.TEXT_PLAIN_VALUE)
                 .post().route()
                 .to("direct:textEndpoint")
                 .endRest();

@@ -1,12 +1,17 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.endpoint;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.AbstractTest;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -15,8 +20,10 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,13 +34,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class HttpRequestTest extends AbstractTest {
 
+    private static Logger logger = LoggerFactory.getLogger(HttpRequestTest.class);
+
     private static final String OPERATION_SUCCEEDED = "{"
             + "\"success\": true,"
             + "\"message\": \"Operation succeeded.\""
             + "\"token\": \"%s\""
             + "}";
 
-    private String expectedContent = "{\n" +
+    private static final String IMAGE_DETAILS = "{"
+            + "\"success\": true,"
+            + "\"message\": \"Operation succeeded.\""
+            + "\"location\": \"REPLACE_ASSET_LOCATION\""
+            + "\"token\": \"%s\""
+            + "}";
+
+    private static String expectedContent = "{\n" +
             "  \"data\":[\n" +
             "    {\n" +
             "      \"id\": 0,\n" +
@@ -94,6 +110,15 @@ public class HttpRequestTest extends AbstractTest {
         }
     }
 
+    @BeforeEach
+    public void resetJsonData() throws IOException, InterruptedException {
+        String fileName = "data.json";
+        File jsonFile = new File("files/input/"+fileName);
+        FileUtils.writeStringToFile(jsonFile, expectedContent);
+        Thread.sleep(1_000L);
+        logger.info("resetting json");
+    }
+
     @Test
     public void greetingShouldReturnDefaultMessage() throws Exception {
         String check = this.restTemplate.getForObject("http://localhost:" + port + "/rest/ping",
@@ -131,10 +156,17 @@ public class HttpRequestTest extends AbstractTest {
         headers.setContentType(MediaType.IMAGE_JPEG);
         headers.add("FileName",fileName);
         HttpEntity request = new HttpEntity(bytes, headers);
+        File dir = new File(".");
+        String path = dir.getAbsolutePath()
+                .replaceAll("\\\\","/")
+                .replace(".","");
+
+        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION",path+fileName+".jpeg");
+
 
         String check = this.restTemplate.postForObject("http://localhost:" + port + "/rest/images",
                 request,String.class);
-        assertThat(check).contains(OPERATION_SUCCEEDED);
+        assertThat(check).contains(imageDetails);
 
         Thread.sleep(10_000L);
         File storedFile = new File("files/images/"+fileName+".jpeg");

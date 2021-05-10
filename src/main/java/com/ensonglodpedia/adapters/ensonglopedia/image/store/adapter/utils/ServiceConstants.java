@@ -14,13 +14,14 @@ public class ServiceConstants {
             + "\"token\": \"%s\""
             + "}";
 
-    public static final String OPERATION_FAILURE = "{"
-            + "\"success\": true,"
+    public static final String IMAGE_POST_FAILURE = "{"
+            + "\"success\": false,"
             + "\"message\": \"Operation failure.\""
+            + "\"location\": \"\""
             + "\"token\": \"%s\""
             + "}";
 
-    public static final String IMAGE_DETAILS = "{"
+    public static final String IMAGE_POST_SUCCEEDED = "{"
             + "\"success\": true,"
             + "\"message\": \"Operation succeeded.\""
             + "\"location\": \"REPLACE_ASSET_LOCATION\""

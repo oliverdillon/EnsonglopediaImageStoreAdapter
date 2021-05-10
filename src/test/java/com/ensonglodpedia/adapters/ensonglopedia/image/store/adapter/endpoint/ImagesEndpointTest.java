@@ -32,8 +32,9 @@ public class ImagesEndpointTest {
             + "\"token\": \"%s\""
             + "}";
     private static final String OPERATION_FAILURE = "{"
-            + "\"success\": true,"
+            + "\"success\": false,"
             + "\"message\": \"Operation failure.\""
+            + "\"location\": \"\""
             + "\"token\": \"%s\""
             + "}";
 
@@ -52,8 +53,12 @@ public class ImagesEndpointTest {
         String fileName = "Hotel_California_Back";
         File imageFile = new File("files/input/"+fileName+".jpeg");
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
+        File dir = new File(".");
+        String path = dir.getAbsolutePath()
+                .replaceAll("\\\\","/")
+                .replace(".","");
 
-        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION","/assets/"+fileName+".jpeg");
+        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION",path+fileName+".jpeg");
 
         imageMock.expectedBodiesReceived(imageDetails);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
@@ -89,8 +94,12 @@ public class ImagesEndpointTest {
         String fileName = "Blood_Harmony.png";
         File imageFile = new File("files/input/"+fileName);
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
+        File dir = new File(".");
+        String path = dir.getAbsolutePath()
+                .replaceAll("\\\\","/")
+                .replace(".","");
 
-        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION","/assets/"+fileName);
+        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION",path+fileName);
 
         imageMock.expectedBodiesReceived(imageDetails);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
