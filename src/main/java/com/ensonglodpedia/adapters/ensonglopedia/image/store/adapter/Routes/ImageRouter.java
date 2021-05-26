@@ -19,7 +19,7 @@ public class ImageRouter extends RouteBuilder {
                 .to("mock:images");
 
         from("direct:postImageEndpoint")
-                .setProperty("Log", constant("Storing vinyl image data for: ${header.Filename}"))
+                .setProperty("Log", simple("Storing vinyl image data for: ${header.Filename}"))
                 .process(new SimpleLoggingProcessor())
                 .choice()
                     .when(header("filename").regex("^.*\\.(jpg|jpeg|JPG|png)$"))
