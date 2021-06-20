@@ -188,4 +188,40 @@ public class HttpRequestTest extends AbstractTest {
         JsonNode responseNode = objectMapper.readTree(response);
         assertEquals(expectedNode, responseNode);
     }
+
+    @Test
+    public void postVinylShouldReturnDefaultMessage(){
+        String body = "{\n" +
+                "      \"id\": 5,\n" +
+                "      \"artist\": \"Hello\",\n" +
+                "      \"album\": \"example album\",\n" +
+                "      \"date\": \"2020\",\n" +
+                "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
+                "    }";
+
+        HttpEntity request = new HttpEntity(body);
+        String response = this.restTemplate.postForObject("http://localhost:" + port + "/rest/vinyls",
+                request,String.class);
+
+        assertThat(response).contains(OPERATION_SUCCEEDED);
+
+    }
+
+    @Test
+    public void postVinylShouldOverwirte(){
+        String body = "{\n" +
+                "      \"id\": 1,\n" +
+                "      \"artist\": \"Hello\",\n" +
+                "      \"album\": \"example album\",\n" +
+                "      \"date\": \"2020\",\n" +
+                "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
+                "    }";
+
+        HttpEntity request = new HttpEntity(body);
+        String response = this.restTemplate.postForObject("http://localhost:" + port + "/rest/vinyls",
+                request,String.class);
+
+        assertThat(response).contains(OPERATION_SUCCEEDED);
+
+    }
 }
