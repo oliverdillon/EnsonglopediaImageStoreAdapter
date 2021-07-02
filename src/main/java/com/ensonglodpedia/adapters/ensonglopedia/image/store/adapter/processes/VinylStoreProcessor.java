@@ -1,5 +1,7 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes;
 
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.Vinyl;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.VinylsResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
