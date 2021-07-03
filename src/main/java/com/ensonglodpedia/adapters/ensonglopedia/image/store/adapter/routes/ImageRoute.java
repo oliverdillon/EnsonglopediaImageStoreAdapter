@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.MessageProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
@@ -9,7 +9,7 @@ import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.util
 import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.IMAGE_POST_FAILURE;
 
 @Component
-public class ImageRouter extends RouteBuilder {
+public class ImageRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("direct:getImageEndpoint")

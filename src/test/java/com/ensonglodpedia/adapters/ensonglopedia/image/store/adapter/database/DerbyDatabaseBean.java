@@ -32,23 +32,23 @@ public class DerbyDatabaseBean {
 
       jdbcTemplate.execute("CREATE SCHEMA vinyls");
       jdbcTemplate
-              .execute("create table vinyls.vinyls (id integer not null, primary key (id))");
+              .execute("create table vinyls.vinyls (vinyl_id integer not null, primary key (vinyl_id))");
       jdbcTemplate
-              .execute("create table vinyls.artists (id integer not null, artist_name varchar(200) not null, primary key (id))");
+              .execute("create table vinyls.artists (artist_id integer not null, artist_name varchar(200) not null, primary key (artist_id))");
       jdbcTemplate
-              .execute("create table vinyls.albums (id integer not null, album_title varchar(200) not null, artist_id integer not null, release_year integer not null, primary key (id))");
+              .execute("create table vinyls.albums (vinyl_id integer not null, album_title varchar(200) not null, artist_id integer not null, release_year integer not null, primary key (vinyl_id))");
       jdbcTemplate
-              .execute("alter table vinyls.albums add constraint vinyls_albums_fk_1 foreign key (id) references vinyls.vinyls (id)");
+              .execute("alter table vinyls.albums add constraint vinyls_albums_fk_1 foreign key (vinyl_id) references vinyls.vinyls (vinyl_id)");
       jdbcTemplate
-              .execute("alter table vinyls.albums add constraint vinyls_albums_fk_2 foreign key (artist_id) references vinyls.artists (id)");
+              .execute("alter table vinyls.albums add constraint vinyls_albums_fk_2 foreign key (artist_id) references vinyls.artists (artist_id)");
       jdbcTemplate
-              .execute("create table vinyls.songs (id integer not null, song_title varchar(200) not null, vinyl_id integer not null, primary key (id))");
+              .execute("create table vinyls.songs (song_id integer not null, song_title varchar(200) not null, vinyl_id integer not null, primary key (song_id))");
       jdbcTemplate
-              .execute("alter table vinyls.songs add constraint vinyls_songs_fk_1 foreign key (vinyl_id) references vinyls.albums (id)");
+              .execute("alter table vinyls.songs add constraint vinyls_songs_fk_1 foreign key (vinyl_id) references vinyls.albums (vinyl_id)");
       jdbcTemplate
-              .execute("create table vinyls.images (id integer not null, image_loc varchar(200) not null, vinyl_id integer not null, primary key (id))");
+              .execute("create table vinyls.images (image_id integer not null, image_loc varchar(200) not null, vinyl_id integer not null, primary key (image_id))");
       jdbcTemplate
-              .execute("alter table vinyls.images add constraint vinyls_images_fk_1 foreign key (vinyl_id) references vinyls.vinyls (id)");
+              .execute("alter table vinyls.images add constraint vinyls_images_fk_1 foreign key (vinyl_id) references vinyls.vinyls (vinyl_id)");
    }
 
    public void destroy() throws Exception {

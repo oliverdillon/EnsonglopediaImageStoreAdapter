@@ -1,6 +1,5 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylsResponse;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
@@ -65,6 +64,11 @@ public class WebserverRoute extends RouteBuilder {
         rest("/text")
                 .post().route()
                 .to("direct:textEndpoint")
+                .endRest();
+
+        rest("/test")
+                .post().route()
+                .to("direct:testEndpoint")
                 .endRest();
     }
 }

@@ -1,9 +1,8 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.database;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes.VinylsRouter;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.VinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.IntegrationConfig;
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,7 +22,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestIntegration.class,
-      IntegrationConfig.class, VinylsRouter.class })
+      IntegrationConfig.class, VinylsRoute.class })
 public class NewVinylRouteTest {
 
    @Inject

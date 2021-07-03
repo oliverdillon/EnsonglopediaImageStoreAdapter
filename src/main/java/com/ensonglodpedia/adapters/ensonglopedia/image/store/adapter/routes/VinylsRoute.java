@@ -1,11 +1,11 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.Routes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.Vinyl;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.Vinyls;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylRetrievalProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylStoreProcessor;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylsResponse;
-//import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.OrderStatus;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.VinylsResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jackson.JacksonDataFormat;
@@ -14,13 +14,17 @@ import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.OPERATION_SUCCEEDED;
 
 @Component
-public class VinylsRouter extends RouteBuilder {
+public class VinylsRoute extends RouteBuilder {
 
     @Autowired
     public SqlComponent sql;
+
+    public String uuid = UUID.randomUUID().toString();
 
     @Override
     public void configure() throws Exception {
@@ -37,6 +41,12 @@ public class VinylsRouter extends RouteBuilder {
                 .marshal().json(JsonLibrary.Jackson)
                 .to("mock:vinyls");
 
+        from("direct:getVinylsEndpoint")
+                .to("sql:select artist_name, album_title, year from vinyls.albums" +
+                        "inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id" +
+                        "where vinyl_id ='"+uuid+"';")
+                .to("log:"+ Vinyl.class.getName());
+
         from("direct:postVinylsEndpoint")
                 .setProperty("Log", constant("Adding to vinyl data"))
                 .process(new SimpleLoggingProcessor())
@@ -46,8 +56,15 @@ public class VinylsRouter extends RouteBuilder {
                 .setBody(constant(OPERATION_SUCCEEDED))
                 .to("mock:vinyls");
 
-        from(
-                "sql:select id from vinyls.vinyls").to(
-                "log:"+ Vinyls.class.getName()+"?level=INFO");
+        from("direct:testEndpoint")
+                .to("sql:select vinyls.add_vinyl('0b2f7a82-d1d7-11eb-ae32-06d3dce85271'," +
+                        "'0b2f7a82-d1d7-11eb-ae32-06d3dce85279'," +
+                        "'Prince'," +
+                        "'Purple Rain'," +
+                        "1984)");
+
+        from("sql:select vinyl_id from vinyls.vinyls;").to(
+                 "log:"+ Vinyls.class.getName()+"?level=INFO");
+
     }
 }
