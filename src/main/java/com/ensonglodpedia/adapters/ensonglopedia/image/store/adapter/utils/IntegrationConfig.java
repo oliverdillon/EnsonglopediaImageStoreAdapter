@@ -3,7 +3,7 @@ package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.ImageRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.PingRoute;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.LocalVinylsRoute;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.local.LocalVinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.WebserverRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls.GetVinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls.PostVinylsRoute;

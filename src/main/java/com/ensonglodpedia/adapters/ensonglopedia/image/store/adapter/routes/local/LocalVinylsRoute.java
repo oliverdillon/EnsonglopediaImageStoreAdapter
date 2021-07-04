@@ -1,8 +1,8 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.local;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.LocalVinylRetrievalProcessor;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.LocalVinylStoreProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.local.LocalVinylRetrievalProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.local.LocalVinylStoreProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.VinylsResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.builder.RouteBuilder;

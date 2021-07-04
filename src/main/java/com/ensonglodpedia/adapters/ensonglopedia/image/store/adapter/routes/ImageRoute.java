@@ -1,6 +1,6 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.LocalImagePostRequestProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.local.LocalImagePostRequestProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;

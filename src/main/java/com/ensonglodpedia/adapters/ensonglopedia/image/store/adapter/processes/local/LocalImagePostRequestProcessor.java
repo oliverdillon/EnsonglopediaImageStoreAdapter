@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.local;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;

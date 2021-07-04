@@ -1,6 +1,6 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.database;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.LocalVinylsRoute;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.local.LocalVinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.IntegrationConfig;
 import org.junit.After;
 import org.junit.Test;

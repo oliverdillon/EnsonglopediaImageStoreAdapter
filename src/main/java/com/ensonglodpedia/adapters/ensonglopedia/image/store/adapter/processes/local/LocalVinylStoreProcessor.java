@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.local;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.Vinyl;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.VinylsResponse;
