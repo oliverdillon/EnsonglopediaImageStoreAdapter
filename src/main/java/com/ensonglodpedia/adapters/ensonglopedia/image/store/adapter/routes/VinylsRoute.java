@@ -24,7 +24,9 @@ public class VinylsRoute extends RouteBuilder {
     @Autowired
     public SqlComponent sql;
 
-    public String uuid = UUID.randomUUID().toString();
+    public String vinyl_uuid = UUID.randomUUID().toString();
+
+    public String artist_uuid = UUID.randomUUID().toString();
 
     @Override
     public void configure() throws Exception {
@@ -41,11 +43,13 @@ public class VinylsRoute extends RouteBuilder {
                 .marshal().json(JsonLibrary.Jackson)
                 .to("mock:vinyls");
 
-        from("direct:getVinylsEndpoint")
+        from("direct:testGetEndpoint")
                 .to("sql:select artist_name, album_title, year from vinyls.albums" +
-                        "inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id" +
-                        "where vinyl_id ='"+uuid+"';")
-                .to("log:"+ Vinyl.class.getName());
+                        " inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id" +
+                        " where vinyl_id ='0b2f7a82-d1d7-11eb-ae32-06d3dce85271';")
+//                .to("log:"+VinylsRoute.class.getName()+"?level=DEBUG")
+                .log("${body}")
+                    .to("mock:vinyls");
 
         from("direct:postVinylsEndpoint")
                 .setProperty("Log", constant("Adding to vinyl data"))
@@ -56,15 +60,12 @@ public class VinylsRoute extends RouteBuilder {
                 .setBody(constant(OPERATION_SUCCEEDED))
                 .to("mock:vinyls");
 
-        from("direct:testEndpoint")
-                .to("sql:select vinyls.add_vinyl('0b2f7a82-d1d7-11eb-ae32-06d3dce85271'," +
-                        "'0b2f7a82-d1d7-11eb-ae32-06d3dce85279'," +
+        from("direct:testPostEndpoint")
+                .to("sql:select vinyls.add_vinyl('" +vinyl_uuid+"'," +
+                        "'" +artist_uuid+"'," +
                         "'Prince'," +
                         "'Purple Rain'," +
                         "1984)");
-
-        from("sql:select vinyl_id from vinyls.vinyls;").to(
-                 "log:"+ Vinyls.class.getName()+"?level=INFO");
 
     }
 }

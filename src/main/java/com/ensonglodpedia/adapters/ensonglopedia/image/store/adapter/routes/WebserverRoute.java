@@ -38,37 +38,38 @@ public class WebserverRoute extends RouteBuilder {
 
         rest("/ping")
                 .get().route()
-                .to("direct:pingEndpoint")
+                    .to("direct:pingEndpoint")
                 .endRest();
 
         rest("/vinyls")
                 .produces(MediaType.APPLICATION_JSON_VALUE)
-                .get()
-                    .route()
+                .get().route()
                     .to("direct:getVinylsEndpoint")
                 .endRest()
 
-                .post()
-                    .route()
+                .post().route()
                     .to("direct:postVinylsEndpoint")
                 .endRest();
 
         rest("/images")
                 .get().route()
-                .to("direct:getImageEndpoint")
+                    .to("direct:getImageEndpoint")
                 .endRest()
                 .post().route()
-                .to("direct:postImageEndpoint")
+                    .to("direct:postImageEndpoint")
                 .endRest();
 
         rest("/text")
                 .post().route()
-                .to("direct:textEndpoint")
+                    .to("direct:textEndpoint")
                 .endRest();
 
         rest("/test")
+                .get().route()
+                    .to("direct:testGetEndpoint")
+                .endRest()
                 .post().route()
-                .to("direct:testEndpoint")
+                    .to("direct:testPostEndpoint")
                 .endRest();
     }
 }
