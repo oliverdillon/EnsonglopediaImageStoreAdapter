@@ -59,11 +59,6 @@ public class WebserverRoute extends RouteBuilder {
                     .to("direct:postImageEndpoint")
                 .endRest();
 
-        rest("/text")
-                .post().route()
-                    .to("direct:textEndpoint")
-                .endRest();
-
         rest("/test")
                 .get().route()
                     .to("direct:testGetEndpoint")

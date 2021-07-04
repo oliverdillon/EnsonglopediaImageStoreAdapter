@@ -1,6 +1,6 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.database;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.VinylsRoute;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.LocalVinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.IntegrationConfig;
 import org.junit.After;
 import org.junit.Test;
@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { TestIntegration.class,
-      IntegrationConfig.class, VinylsRoute.class })
+      IntegrationConfig.class, LocalVinylsRoute.class })
 public class NewVinylRouteTest {
 
    @Inject

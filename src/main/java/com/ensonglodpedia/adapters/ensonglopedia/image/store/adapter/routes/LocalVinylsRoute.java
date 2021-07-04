@@ -1,32 +1,19 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.Vinyl;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.Vinyls;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylRetrievalProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.LocalVinylRetrievalProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylStoreProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.VinylsResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jackson.JacksonDataFormat;
-import org.apache.camel.component.sql.SqlComponent;
 import org.apache.camel.model.dataformat.JsonLibrary;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 import static com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.ServiceConstants.OPERATION_SUCCEEDED;
 
 @Component
-public class VinylsRoute extends RouteBuilder {
-
-    @Autowired
-    public SqlComponent sql;
-
-    public String vinyl_uuid = UUID.randomUUID().toString();
-
-    public String artist_uuid = UUID.randomUUID().toString();
+public class LocalVinylsRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
@@ -38,18 +25,10 @@ public class VinylsRoute extends RouteBuilder {
                 .process(new SimpleLoggingProcessor())
                 .transform(simple("files/input/data.json",java.io.File.class))
                 .convertBodyTo(String.class)
-                .process(new VinylRetrievalProcessor())
+                .process(new LocalVinylRetrievalProcessor())
 //                    .marshal(vinylRequestDataFormat)
                 .marshal().json(JsonLibrary.Jackson)
                 .to("mock:vinyls");
-
-        from("direct:testGetEndpoint")
-                .to("sql:select artist_name, album_title, year from vinyls.albums" +
-                        " inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id" +
-                        " where vinyl_id ='0b2f7a82-d1d7-11eb-ae32-06d3dce85271';")
-//                .to("log:"+VinylsRoute.class.getName()+"?level=DEBUG")
-                .log("${body}")
-                    .to("mock:vinyls");
 
         from("direct:postVinylsEndpoint")
                 .setProperty("Log", constant("Adding to vinyl data"))
@@ -59,13 +38,6 @@ public class VinylsRoute extends RouteBuilder {
                 .to("file:files/input/?fileName=data.json")
                 .setBody(constant(OPERATION_SUCCEEDED))
                 .to("mock:vinyls");
-
-        from("direct:testPostEndpoint")
-                .to("sql:select vinyls.add_vinyl('" +vinyl_uuid+"'," +
-                        "'" +artist_uuid+"'," +
-                        "'Prince'," +
-                        "'Purple Rain'," +
-                        "1984)");
 
     }
 }

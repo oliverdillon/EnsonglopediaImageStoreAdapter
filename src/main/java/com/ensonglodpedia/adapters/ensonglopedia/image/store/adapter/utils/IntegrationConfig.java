@@ -4,8 +4,10 @@ package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.ImageRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.PingRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.TextRoute;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.VinylsRoute;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.LocalVinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.WebserverRoute;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls.GetVinylsRoute;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls.PostVinylsRoute;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.sql.SqlComponent;
 import org.apache.camel.spring.javaconfig.CamelConfiguration;
@@ -47,7 +49,13 @@ public class IntegrationConfig extends CamelConfiguration {
    private TextRoute textRoute;
 
    @Autowired
-   private VinylsRoute vinylsRoute;
+   private LocalVinylsRoute localVinylsRoute;
+
+   @Autowired
+   private GetVinylsRoute getVinylsRoute;
+
+   @Autowired
+   private PostVinylsRoute postVinylsRoute;
 
    @Autowired
    private WebserverRoute webserverRoute;
@@ -55,6 +63,7 @@ public class IntegrationConfig extends CamelConfiguration {
    @Override
    public List<RouteBuilder> routes() {
       return Arrays.asList(imageRoute, pingRoute,
-              textRoute, vinylsRoute,webserverRoute);
+              textRoute,localVinylsRoute,
+              getVinylsRoute,postVinylsRoute,webserverRoute);
    }
 }
