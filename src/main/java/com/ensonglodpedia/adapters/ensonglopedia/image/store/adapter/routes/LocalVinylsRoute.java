@@ -2,7 +2,7 @@ package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.LocalVinylRetrievalProcessor;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.VinylStoreProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.LocalVinylStoreProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.VinylsResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.builder.RouteBuilder;
@@ -33,7 +33,7 @@ public class LocalVinylsRoute extends RouteBuilder {
         from("direct:postVinylsEndpoint")
                 .setProperty("Log", constant("Adding to vinyl data"))
                 .process(new SimpleLoggingProcessor())
-                .process(new VinylStoreProcessor())
+                .process(new LocalVinylStoreProcessor())
                 .marshal().json(JsonLibrary.Jackson)
                 .to("file:files/input/?fileName=data.json")
                 .setBody(constant(OPERATION_SUCCEEDED))

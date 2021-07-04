@@ -3,7 +3,6 @@ package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.ImageRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.PingRoute;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.TextRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.LocalVinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.WebserverRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls.GetVinylsRoute;
@@ -46,9 +45,6 @@ public class IntegrationConfig extends CamelConfiguration {
    private PingRoute pingRoute;
 
    @Autowired
-   private TextRoute textRoute;
-
-   @Autowired
    private LocalVinylsRoute localVinylsRoute;
 
    @Autowired
@@ -63,7 +59,7 @@ public class IntegrationConfig extends CamelConfiguration {
    @Override
    public List<RouteBuilder> routes() {
       return Arrays.asList(imageRoute, pingRoute,
-              textRoute,localVinylsRoute,
-              getVinylsRoute,postVinylsRoute,webserverRoute);
+              localVinylsRoute, getVinylsRoute,
+              postVinylsRoute,webserverRoute);
    }
 }

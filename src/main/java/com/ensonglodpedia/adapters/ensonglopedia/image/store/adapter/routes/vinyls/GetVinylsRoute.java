@@ -3,10 +3,12 @@ package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vin
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.sql.SqlComponent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GetVinylsRoute extends RouteBuilder {
-    @Autowired
-    public SqlComponent sql;
+//    @Autowired
+//    public SqlComponent sql;
 
     @Override
     public void configure() throws Exception {

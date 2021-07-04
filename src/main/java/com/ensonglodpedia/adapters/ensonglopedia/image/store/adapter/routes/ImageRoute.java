@@ -1,6 +1,6 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.MessageProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.LocalImagePostRequestProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
@@ -23,15 +23,15 @@ public class ImageRoute extends RouteBuilder {
                 .process(new SimpleLoggingProcessor())
                 .choice()
                     .when(header("filename").regex("^.*\\.(jpg|jpeg|JPG|png)$"))
-                        .to("file:files/images?fileName=${header.Filename}")
+                        .to("file:../ensonglopedia-frontend/src/assets?fileName=${header.Filename}")
                         .setBody(constant(IMAGE_POST_SUCCEEDED))
                     .when(header("filename").regex("^.*\\..*$"))
                         .setBody(constant(IMAGE_POST_FAILURE))
                     .otherwise()
-                        .to("file:files/images?fileName=${header.Filename}.jpeg")
+                        .to("file:../ensonglopedia-frontend/src/assets?fileName=${header.Filename}.jpeg")
                         .setBody(constant(IMAGE_POST_SUCCEEDED))
                 .end()
-                .process(new MessageProcessor())
+                .process(new LocalImagePostRequestProcessor())
                 .to("mock:images");
     }
 }

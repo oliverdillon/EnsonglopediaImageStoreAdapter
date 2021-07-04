@@ -11,7 +11,7 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class VinylStoreProcessor implements Processor {
+public class LocalVinylStoreProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         File jsonFile = new File("files/input/data.json");
