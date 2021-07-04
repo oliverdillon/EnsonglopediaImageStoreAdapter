@@ -1,12 +1,20 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class Vinyl {
 
     private int id;
+
+    @JsonProperty("artist_name")
     private String artist;
+
+    @JsonProperty("album_title")
     private String album;
+
+    @JsonProperty("year")
     private String date;
     private List<String> imgs;
 

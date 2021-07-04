@@ -1,8 +1,8 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls;
 
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.GetVinylProcessor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.sql.SqlComponent;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,9 +15,10 @@ public class GetVinylsRoute extends RouteBuilder {
         from("direct:testGetEndpoint")
                 .to("sql:select artist_name, album_title, year from vinyls.albums" +
                         " inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id" +
-                        " where vinyl_id ='0b2f7a82-d1d7-11eb-ae32-06d3dce85271';")
+                        " where vinyl_id ='0b2f7a82-d1d7-11eb-ae32-06d3dce85271'")
 //                .to("log:"+VinylsRoute.class.getName()+"?level=DEBUG")
-                .log("${body}")
+                .process(new GetVinylProcessor())
+                .marshal().json(JsonLibrary.Jackson)
                 .to("mock:vinyls");
     }
 }
