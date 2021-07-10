@@ -6,7 +6,8 @@ import java.util.List;
 
 public class Vinyl {
 
-    private int id;
+    @JsonProperty("vinyl_id")
+    private String id;
 
     @JsonProperty("artist_name")
     private String artist;
@@ -18,11 +19,11 @@ public class Vinyl {
     private String date;
     private List<String> imgs;
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

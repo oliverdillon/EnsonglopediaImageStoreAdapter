@@ -8,21 +8,21 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
-@Configuration
-@EnableTransactionManagement
-public class DataConfig {
-
-   @Inject
-   private Environment environment;
-
-   @Bean
-   public DataSource dataSource() {
-      BasicDataSource dataSource = new BasicDataSource();
-      dataSource.setDriverClassName(environment.getProperty("db.driver"));
-      dataSource.setUrl(environment.getProperty("db.url"));
-      dataSource.setUsername(environment.getProperty("db.username"));
-      dataSource.setPassword(environment.getProperty("db.password"));
-      return dataSource;
-   }
-
-}
+//@Configuration
+//@EnableTransactionManagement
+//public class DataConfig {
+//
+//   @Inject
+//   private Environment environment;
+//
+//   @Bean
+//   public DataSource dataSource() {
+//      BasicDataSource dataSource = new BasicDataSource();
+//      dataSource.setDriverClassName(environment.getProperty("db.driver"));
+//      dataSource.setUrl(environment.getProperty("db.url"));
+//      dataSource.setUsername(environment.getProperty("db.username"));
+//      dataSource.setPassword(environment.getProperty("db.password"));
+//      return dataSource;
+//   }
+//
+//}

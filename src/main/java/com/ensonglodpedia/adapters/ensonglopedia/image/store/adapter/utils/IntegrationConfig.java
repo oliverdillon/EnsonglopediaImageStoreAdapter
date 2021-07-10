@@ -15,51 +15,61 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
 
-@Configuration
-@ComponentScan("com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes")
-public class IntegrationConfig extends CamelConfiguration {
-
-   @Inject
-   private Environment environment;
-
-   @Inject
-   private DataSource dataSource;
-
-   @Bean
-   public SqlComponent sql() {
-      SqlComponent sqlComponent = new SqlComponent();
-      sqlComponent.setDataSource(dataSource);
-      return sqlComponent;
-   }
-
-   @Autowired
-   private ImageRoute imageRoute;
-
-   @Autowired
-   private PingRoute pingRoute;
-
-   @Autowired
-   private LocalVinylsRoute localVinylsRoute;
-
-   @Autowired
-   private GetVinylsRoute getVinylsRoute;
-
-   @Autowired
-   private PostVinylsRoute postVinylsRoute;
-
-   @Autowired
-   private WebserverRoute webserverRoute;
-
-   @Override
-   public List<RouteBuilder> routes() {
-      return Arrays.asList(imageRoute, pingRoute,
-              localVinylsRoute, getVinylsRoute,
-              postVinylsRoute,webserverRoute);
-   }
+//@Configuration
+//@ComponentScan("com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes")
+public class IntegrationConfig {
+//
+//   @Inject
+//   private Environment environment;
+//
+//   @Inject
+//   private DataSource dataSource;
+//
+////   public JdbcTemplate jdbcTemplate;
+//
+//   @Autowired
+//   private ImageRoute imageRoute;
+//
+//   @Autowired
+//   private PingRoute pingRoute;
+//
+//   @Autowired
+//   private LocalVinylsRoute localVinylsRoute;
+//
+//   @Autowired
+//   private GetVinylsRoute getVinylsRoute;
+//
+//   @Autowired
+//   private PostVinylsRoute postVinylsRoute;
+//
+//   @Autowired
+//   private WebserverRoute webserverRoute;
+//
+////   @Bean
+////   public SqlComponent sql() {
+////      SqlComponent sqlComponent = new SqlComponent();
+////      sqlComponent.setDataSource(dataSource);
+////      return sqlComponent;
+////   }
+//
+////   @Autowired
+////   public JdbcTemplate setJdbcTemplate() {
+////      jdbcTemplate = new JdbcTemplate();
+////      jdbcTemplate.setDataSource(dataSource);
+////      return jdbcTemplate;
+////   }
+//
+//   @Override
+//   public List<RouteBuilder> routes() {
+//      return Arrays.asList(imageRoute, pingRoute,
+//              localVinylsRoute, getVinylsRoute,
+//              postVinylsRoute,webserverRoute);
+//   }
 }

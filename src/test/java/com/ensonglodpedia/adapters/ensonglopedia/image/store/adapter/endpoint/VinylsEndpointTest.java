@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 @ContextConfiguration
 public class VinylsEndpointTest {
 
-    @EndpointInject("mock:vinyls")
+    @EndpointInject("mock:legacyVinyls")
     protected MockEndpoint ping;
 
     @Autowired
@@ -188,7 +188,7 @@ public class VinylsEndpointTest {
                 .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
 
         ping.expectedBodiesReceived(initialContent);
-        template.setDefaultEndpointUri("direct:getVinylsEndpoint");
+        template.setDefaultEndpointUri("direct:getVinylsLegacyEndpoint");
         template.sendBody("");
         ping.assertIsSatisfied();
     }
@@ -208,7 +208,7 @@ public class VinylsEndpointTest {
                 .replaceAll("[\t\r\n]","")
                 .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
 
-        template.setDefaultEndpointUri("direct:postVinylsEndpoint");
+        template.setDefaultEndpointUri("direct:postVinylsLegacyEndpoint");
         template.sendBody(body);
         ping.assertIsSatisfied();
 
@@ -238,7 +238,7 @@ public class VinylsEndpointTest {
                 .replaceAll("[\t\r\n]","")
                 .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
 
-        template.setDefaultEndpointUri("direct:postVinylsEndpoint");
+        template.setDefaultEndpointUri("direct:postVinylsLegacyEndpoint");
         template.sendBody(body);
         ping.assertIsSatisfied();
 

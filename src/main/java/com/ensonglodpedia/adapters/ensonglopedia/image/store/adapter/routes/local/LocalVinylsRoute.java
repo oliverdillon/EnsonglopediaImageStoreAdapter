@@ -20,7 +20,7 @@ public class LocalVinylsRoute extends RouteBuilder {
         ObjectMapper objectMapper = new ObjectMapper();
         JacksonDataFormat vinylRequestDataFormat= new JacksonDataFormat(objectMapper, VinylsResponse.class);
 
-        from("direct:getVinylsEndpoint")
+        from("direct:getVinylsLegacyEndpoint")
                 .setProperty("Log", constant("Retrieving vinyl data"))
                 .process(new SimpleLoggingProcessor())
                 .transform(simple("files/input/data.json",java.io.File.class))
@@ -28,7 +28,7 @@ public class LocalVinylsRoute extends RouteBuilder {
                 .process(new LocalVinylRetrievalProcessor())
 //                    .marshal(vinylRequestDataFormat)
                 .marshal().json(JsonLibrary.Jackson)
-                .to("mock:vinyls");
+                .to("mock:legacyVinyls");
 
         from("direct:postVinylsEndpoint")
                 .setProperty("Log", constant("Adding to vinyl data"))
@@ -37,7 +37,7 @@ public class LocalVinylsRoute extends RouteBuilder {
                 .marshal().json(JsonLibrary.Jackson)
                 .to("file:files/input/?fileName=data.json")
                 .setBody(constant(OPERATION_SUCCEEDED))
-                .to("mock:vinyls");
+                .to("mock:legacyVinyls");
 
     }
 }

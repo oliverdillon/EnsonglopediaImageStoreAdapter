@@ -7,15 +7,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GetVinylsRoute extends RouteBuilder {
-//    @Autowired
-//    public SqlComponent sql;
 
     @Override
     public void configure() throws Exception {
         from("direct:testGetEndpoint")
-                .to("sql:select artist_name, album_title, year from vinyls.albums" +
-                        " inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id" +
-                        " where vinyl_id ='0b2f7a82-d1d7-11eb-ae32-06d3dce85271'")
+                .to("sql:select vinyl_id, artist_name, album_title, year from vinyls.albums" +
+                        " inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id")
 //                .to("log:"+VinylsRoute.class.getName()+"?level=DEBUG")
                 .process(new GetVinylProcessor())
                 .marshal().json(JsonLibrary.Jackson)

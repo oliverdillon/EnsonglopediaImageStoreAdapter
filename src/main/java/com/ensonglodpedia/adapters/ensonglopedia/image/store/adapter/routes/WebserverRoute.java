@@ -41,14 +41,14 @@ public class WebserverRoute extends RouteBuilder {
                     .to("direct:pingEndpoint")
                 .endRest();
 
-        rest("/vinyls")
+        rest("/legacyVinyls")
                 .produces(MediaType.APPLICATION_JSON_VALUE)
                 .get().route()
-                    .to("direct:getVinylsEndpoint")
+                    .to("direct:getVinylsLegacyEndpoint")
                 .endRest()
 
                 .post().route()
-                    .to("direct:postVinylsEndpoint")
+                    .to("direct:postVinylsLegacyEndpoint")
                 .endRest();
 
         rest("/images")
@@ -59,12 +59,12 @@ public class WebserverRoute extends RouteBuilder {
                     .to("direct:postImageEndpoint")
                 .endRest();
 
-        rest("/test")
+        rest("/vinyls")
                 .get().route()
-                    .to("direct:testGetEndpoint")
+                    .to("direct:getVinylsEndpoint")
                 .endRest()
                 .post().route()
-                    .to("direct:testPostEndpoint")
+                    .to("direct:postVinylsEndpoint")
                 .endRest();
     }
 }
