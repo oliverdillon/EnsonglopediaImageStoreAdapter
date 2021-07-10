@@ -23,6 +23,8 @@ public class Vinyl {
     @JsonAlias("date")
     private String date;
 
+    @JsonProperty("imgs")
+    @JsonAlias("imgs")
     private List<String> imgs;
 
     public String getId() {
