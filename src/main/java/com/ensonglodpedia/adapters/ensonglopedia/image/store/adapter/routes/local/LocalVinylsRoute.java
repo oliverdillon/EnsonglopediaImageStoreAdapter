@@ -30,7 +30,7 @@ public class LocalVinylsRoute extends RouteBuilder {
                 .marshal().json(JsonLibrary.Jackson)
                 .to("mock:legacyVinyls");
 
-        from("direct:postVinylsEndpoint")
+        from("direct:postVinylsLegacyEndpoint")
                 .setProperty("Log", constant("Adding to vinyl data"))
                 .process(new SimpleLoggingProcessor())
                 .process(new LocalVinylStoreProcessor())
