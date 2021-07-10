@@ -1,5 +1,6 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -7,16 +8,21 @@ import java.util.List;
 public class Vinyl {
 
     @JsonProperty("vinyl_id")
+    @JsonAlias("id")
     private String id;
 
     @JsonProperty("artist_name")
+    @JsonAlias("artist")
     private String artist;
 
     @JsonProperty("album_title")
+    @JsonAlias("album")
     private String album;
 
     @JsonProperty("year")
+    @JsonAlias("date")
     private String date;
+
     private List<String> imgs;
 
     public String getId() {
