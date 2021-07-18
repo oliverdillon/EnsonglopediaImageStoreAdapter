@@ -7,56 +7,42 @@ import java.util.List;
 
 public class Vinyl {
 
-    @JsonProperty("vinyl_id")
-    @JsonAlias("id")
-    private String id;
-
-    @JsonProperty("artist_name")
-    @JsonAlias("artist")
-    private String artist;
-
-    @JsonProperty("album_title")
-    @JsonAlias("album")
-    private String album;
-
-    @JsonProperty("year")
-    @JsonAlias("date")
-    private String date;
-
-    @JsonProperty("imgs")
-    @JsonAlias("imgs")
+    private String vinyl_id;
+    private String artist_name;
+    private String album_title;
+    private String year;
     private List<String> imgs;
 
     public String getId() {
-        return this.id;
+        return this.vinyl_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String vinyl_id) {
+        this.vinyl_id = vinyl_id;
     }
 
     public String getArtist() {
-        return artist;
+        return artist_name;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
+    public void setArtist(String artist_name) {
+        this.artist_name = artist_name;
     }
 
     public String getAlbum() {
-        return album;
+        return album_title;
     }
 
-    public void setAlbum(String album) {
-        this.album = album;
+    public void setAlbum(String album_title) {
+        this.album_title = album_title;
     }
 
     public String getDate() {
-        return date;
+        return year;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDate(String year) {
+        this.year = year;
     }
 
     public List<String> getImgs() {
@@ -70,10 +56,10 @@ public class Vinyl {
     @Override
     public String toString() {
         return "{" +
-                "id=" + id +
-                ", artist='" + artist + '\'' +
-                ", album='" + album + '\'' +
-                ", date='" + date + '\'' +
+                "id=" + vinyl_id +
+                ", artist='" + artist_name + '\'' +
+                ", album='" + album_title + '\'' +
+                ", date='" + year + '\'' +
                 ", imgs=" + imgs +
                 '}';
     }

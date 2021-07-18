@@ -1,7 +1,7 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.local;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.Vinyl;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.VinylsResponse;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.local.VinylLegacy;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.local.VinylsLegacyResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -19,11 +19,11 @@ public class LocalVinylStoreProcessor implements Processor {
 
         //preexisting vinyls
         String json = FileUtils.readFileToString(jsonFile);
-        VinylsResponse vinyls = objectMapper.readValue(json, VinylsResponse.class);
+        VinylsLegacyResponse vinyls = objectMapper.readValue(json, VinylsLegacyResponse.class);
 
         //vinyls to add
         String request = exchange.getMessage().getBody(String.class);
-        Vinyl vinylNew = objectMapper.readValue(request,Vinyl.class);
+        VinylLegacy vinylNew = objectMapper.readValue(request,VinylLegacy.class);
         boolean exists = vinyls.getData().stream()
                 .anyMatch(vinyl -> vinyl.getId()==(vinylNew.getId()));
 
@@ -31,7 +31,7 @@ public class LocalVinylStoreProcessor implements Processor {
             vinyls.getData().add(vinylNew);
         }
         else{
-            List<Vinyl> vinylsData = vinyls.getData().stream()
+            List<VinylLegacy> vinylsData = vinyls.getData().stream()
                     .map(vinyl -> vinyl=(vinyl.getId()==(vinylNew.getId()))? vinylNew:vinyl)
                     .collect(Collectors.toList());
             vinyls.setData(vinylsData);
