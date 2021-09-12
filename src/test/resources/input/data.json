@@ -1,38 +1,38 @@
 {
   "data":[
     {
-      "id": 0,
-      "artist": "",
-      "album": "",
-      "date": "",
+      "vinyl_id": 0,
+      "artist_name": "",
+      "album_title": "",
+      "year": "",
       "imgs": ["/assets/Add_Record_Button.jpg"]
     },
     {
-      "id": 1,
-      "artist": "Prince",
-      "album": "Purple Rain",
-      "date": "1984",
+      "vinyl_id": 1,
+      "artist_name": "Prince",
+      "album_title": "Purple Rain",
+      "year": "1984",
       "imgs": ["/assets/Purple_Rain.jpg","/assets/Purple_Rain_Back.jpg"]
     },
     {
-      "id": 2,
-      "artist": "Finneas",
-      "album": "Blood Harmony",
-      "date": "2019",
+      "vinyl_id": 2,
+      "artist_name": "Finneas",
+      "album_title": "Blood Harmony",
+      "year": "2019",
       "imgs": ["/assets/Blood_Harmony.png","/assets/Blood_Harmony_Back.jpg"]
     },
     {
-      "id": 3,
-      "artist": "Eagles",
-      "album": "Hotel California",
-      "date": "1976",
+      "vinyl_id": 3,
+      "artist_name": "Eagles",
+      "album_title": "Hotel California",
+      "year": "1976",
       "imgs": ["/assets/Hotel_California.jpg","/assets/Hotel_California_Back.jpg"]
     },
     {
-      "id": 4,
-      "artist": "Eagles",
-      "album": "Eagles",
-      "date": "1972",
+      "vinyl_id": 4,
+      "artist_name": "Eagles",
+      "album_title": "Eagles",
+      "year": "1972",
       "imgs": ["/assets/Eagles.jpeg"]
     }
   ]

@@ -1,15 +1,12 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.endpoint;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.AbstractTest;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +17,17 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 public class HttpRequestTest extends AbstractTest {
 
     private static Logger logger = LoggerFactory.getLogger(HttpRequestTest.class);
@@ -52,38 +48,38 @@ public class HttpRequestTest extends AbstractTest {
     private static String expectedContent = "{\n" +
             "  \"data\":[\n" +
             "    {\n" +
-            "      \"id\": 0,\n" +
-            "      \"artist\": \"\",\n" +
-            "      \"album\": \"\",\n" +
-            "      \"date\": \"\",\n" +
+            "      \"vinyl_id\": \"0\",\n" +
+            "      \"artist_name\": \"\",\n" +
+            "      \"album_title\": \"\",\n" +
+            "      \"year\": \"\",\n" +
             "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"id\": 1,\n" +
-            "      \"artist\": \"Prince\",\n" +
-            "      \"album\": \"Purple Rain\",\n" +
-            "      \"date\": \"1984\",\n" +
+            "      \"vinyl_id\": \"1\",\n" +
+            "      \"artist_name\": \"Prince\",\n" +
+            "      \"album_title\": \"Purple Rain\",\n" +
+            "      \"year\": \"1984\",\n" +
             "      \"imgs\": [\"/assets/Purple_Rain.jpg\",\"/assets/Purple_Rain_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"id\": 2,\n" +
-            "      \"artist\": \"Finneas\",\n" +
-            "      \"album\": \"Blood Harmony\",\n" +
-            "      \"date\": \"2019\",\n" +
+            "      \"vinyl_id\": \"2\",\n" +
+            "      \"artist_name\": \"Finneas\",\n" +
+            "      \"album_title\": \"Blood Harmony\",\n" +
+            "      \"year\": \"2019\",\n" +
             "      \"imgs\": [\"/assets/Blood_Harmony.png\",\"/assets/Blood_Harmony_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"id\": 3,\n" +
-            "      \"artist\": \"Eagles\",\n" +
-            "      \"album\": \"Hotel California\",\n" +
-            "      \"date\": \"1976\",\n" +
+            "      \"vinyl_id\": \"3\",\n" +
+            "      \"artist_name\": \"Eagles\",\n" +
+            "      \"album_title\": \"Hotel California\",\n" +
+            "      \"year\": \"1976\",\n" +
             "      \"imgs\": [\"/assets/Hotel_California.jpg\",\"/assets/Hotel_California_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"id\": 4,\n" +
-            "      \"artist\": \"Eagles\",\n" +
-            "      \"album\": \"Eagles\",\n" +
-            "      \"date\": \"1972\",\n" +
+            "      \"vinyl_id\": \"4\",\n" +
+            "      \"artist_name\": \"Eagles\",\n" +
+            "      \"album_title\": \"Eagles\",\n" +
+            "      \"year\": \"1972\",\n" +
             "      \"imgs\": [\"/assets/Eagles.jpeg\"]\n" +
             "    }\n" +
             "  ]\n" +
@@ -127,26 +123,6 @@ public class HttpRequestTest extends AbstractTest {
     }
 
     @Test
-    public void postTextShouldReturnDefaultMessage() throws Exception {
-        File textFile = new File("files/input/Test_File.txt");
-        byte[] bytes = FileUtils.readFileToByteArray(textFile);
-        String fileName = "Hello";
-
-        headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
-        headers.add("FileName",fileName);
-        HttpEntity request = new HttpEntity(bytes, headers);
-
-        String check = this.restTemplate.postForObject("http://localhost:" + port + "/rest/text",
-                request,String.class);
-        assertThat(check).contains(OPERATION_SUCCEEDED);
-
-        Thread.sleep(10_000L);
-        File storedFile = new File("files/text/"+fileName+".txt");
-        assertTrue(storedFile.exists());
-    }
-
-    @Test
     public void postImageShouldReturnDefaultMessage() throws Exception {
         File imageFile = new File("files/input/Hotel_California_Back.jpeg");
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
@@ -156,26 +132,20 @@ public class HttpRequestTest extends AbstractTest {
         headers.setContentType(MediaType.IMAGE_JPEG);
         headers.add("FileName",fileName);
         HttpEntity request = new HttpEntity(bytes, headers);
-        File dir = new File(".");
-        String path = dir.getAbsolutePath()
-                .replaceAll("\\\\","/")
-                .replace(".","");
-
-        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION",path+fileName+".jpeg");
-
+        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION","/assets/"+fileName+".jpeg");
 
         String check = this.restTemplate.postForObject("http://localhost:" + port + "/rest/images",
                 request,String.class);
         assertThat(check).contains(imageDetails);
 
         Thread.sleep(10_000L);
-        File storedFile = new File("files/images/"+fileName+".jpeg");
+        File storedFile = new File("target/"+fileName+".jpeg");
         assertTrue(storedFile.exists());
     }
 
     @Test
     public void getVinylShouldReturnDefaultMessage() throws Exception {
-        String response = this.restTemplate.getForObject("http://localhost:" + port + "/rest/vinyls",String.class);
+        String response = this.restTemplate.getForObject("http://localhost:" + port + "/rest/legacyVinyls",String.class);
 
         String fileName = "input/data.json";
 //        getStringFromResource(fileName)
@@ -192,15 +162,15 @@ public class HttpRequestTest extends AbstractTest {
     @Test
     public void postVinylShouldReturnDefaultMessage(){
         String body = "{\n" +
-                "      \"id\": 5,\n" +
-                "      \"artist\": \"Hello\",\n" +
-                "      \"album\": \"example album\",\n" +
-                "      \"date\": \"2020\",\n" +
+                "      \"vinyl_id\": \"5\",\n" +
+                "      \"artist_name\": \"Hello\",\n" +
+                "      \"album_title\": \"example album\",\n" +
+                "      \"year\": \"2020\",\n" +
                 "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
                 "    }";
 
         HttpEntity request = new HttpEntity(body);
-        String response = this.restTemplate.postForObject("http://localhost:" + port + "/rest/vinyls",
+        String response = this.restTemplate.postForObject("http://localhost:" + port + "/rest/legacyVinyls",
                 request,String.class);
 
         assertThat(response).contains(OPERATION_SUCCEEDED);
@@ -208,17 +178,17 @@ public class HttpRequestTest extends AbstractTest {
     }
 
     @Test
-    public void postVinylShouldOverwirte(){
+    public void postVinylShouldOverwrite(){
         String body = "{\n" +
-                "      \"id\": 1,\n" +
-                "      \"artist\": \"Hello\",\n" +
-                "      \"album\": \"example album\",\n" +
-                "      \"date\": \"2020\",\n" +
+                "      \"vinyl_id\": \"1\",\n" +
+                "      \"artist_name\": \"Hello\",\n" +
+                "      \"album_title\": \"example album\",\n" +
+                "      \"year\": \"2020\",\n" +
                 "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
                 "    }";
 
         HttpEntity request = new HttpEntity(body);
-        String response = this.restTemplate.postForObject("http://localhost:" + port + "/rest/vinyls",
+        String response = this.restTemplate.postForObject("http://localhost:" + port + "/rest/legacyVinyls",
                 request,String.class);
 
         assertThat(response).contains(OPERATION_SUCCEEDED);

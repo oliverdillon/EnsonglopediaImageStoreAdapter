@@ -1,11 +1,10 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models;
-
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.legacy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class Vinyl {
+public class VinylLegacy  {
     @JsonProperty("vinyl_id")
     private String vinyl_id;
 

@@ -11,7 +11,7 @@ public class GetVinylsRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("direct:getVinylsEndpoint")
-                .to("sql:select vinyl_id, artist_name, album_title, year from vinyls.albums" +
+                .to("sql:select vinyl_id, artist_name, album_title, release_year from vinyls.albums" +
                         " inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id")
 //                .to("log:"+VinylsRoute.class.getName()+"?level=DEBUG")
                 .process(new GetVinylProcessor())

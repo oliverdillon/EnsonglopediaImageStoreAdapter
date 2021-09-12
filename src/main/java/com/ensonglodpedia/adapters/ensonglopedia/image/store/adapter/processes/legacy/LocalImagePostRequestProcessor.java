@@ -1,9 +1,7 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.local;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.legacy;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-
-import java.io.File;
 
 public class LocalImagePostRequestProcessor implements Processor {
 

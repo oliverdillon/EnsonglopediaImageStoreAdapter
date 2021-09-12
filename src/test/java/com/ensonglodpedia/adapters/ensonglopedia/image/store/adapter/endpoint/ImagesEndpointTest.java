@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 
 import java.io.File;
@@ -17,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ContextConfiguration
+@ActiveProfiles("test")
 public class ImagesEndpointTest {
 
     @EndpointInject("mock:images")
@@ -53,12 +55,7 @@ public class ImagesEndpointTest {
         String fileName = "Hotel_California_Back";
         File imageFile = new File("files/input/"+fileName+".jpeg");
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
-        File dir = new File(".");
-        String path = dir.getAbsolutePath()
-                .replaceAll("\\\\","/")
-                .replace(".","");
-
-        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION",path+fileName+".jpeg");
+        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION","/assets/"+fileName+".jpeg");
 
         imageMock.expectedBodiesReceived(imageDetails);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
@@ -66,7 +63,7 @@ public class ImagesEndpointTest {
         imageMock.assertIsSatisfied();
 
         Thread.sleep(10_000L);
-        File storedFile = new File("files/images/"+fileName+".jpeg");
+        File storedFile = new File("target/"+fileName+".jpeg");
         assertTrue(storedFile.exists());
     }
 
@@ -94,12 +91,7 @@ public class ImagesEndpointTest {
         String fileName = "Blood_Harmony.png";
         File imageFile = new File("files/input/"+fileName);
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
-        File dir = new File(".");
-        String path = dir.getAbsolutePath()
-                .replaceAll("\\\\","/")
-                .replace(".","");
-
-        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION",path+fileName);
+        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION","/assets/"+fileName);
 
         imageMock.expectedBodiesReceived(imageDetails);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
@@ -107,7 +99,7 @@ public class ImagesEndpointTest {
         imageMock.assertIsSatisfied();
 
         Thread.sleep(10_000L);
-        File storedFile = new File("files/images/"+fileName);
+        File storedFile = new File("target/"+fileName);
         assertTrue(storedFile.exists());
     }
 

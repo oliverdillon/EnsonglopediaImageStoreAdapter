@@ -1,11 +1,16 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.database;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.derby.jdbc.EmbeddedDriver;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 
 /**
@@ -16,10 +21,14 @@ import javax.sql.DataSource;
  * 
  */
 @Configuration
+@Profile("test")
 public class TestIntegration {
 
    private static final String CREATE = "create";
    private static final String DESTROY = "destroy";
+
+   @Inject
+   private Environment environment;
 
    /**
     * DataSource bean for the Apache Derby database.

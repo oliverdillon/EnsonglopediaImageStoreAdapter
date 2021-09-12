@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.database;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -21,12 +21,12 @@ public class DerbyDatabaseBean {
    public void create() throws Exception {
 
       try {
-         jdbcTemplate.execute("drop table vinyls.vinyls");
-         jdbcTemplate.execute("drop table vinyls.artists");
-         jdbcTemplate.execute("drop table vinyls.albums");
-         jdbcTemplate.execute("drop table vinyls.songs");
          jdbcTemplate.execute("drop table vinyls.images");
-         jdbcTemplate.execute("drop schema vinyls");
+         jdbcTemplate.execute("drop table vinyls.songs");
+         jdbcTemplate.execute("drop table vinyls.albums");
+         jdbcTemplate.execute("drop table vinyls.artists");
+         jdbcTemplate.execute("drop table vinyls.vinyls");
+         jdbcTemplate.execute("drop schema vinyls restrict");
       } catch (Throwable e) {
       }
 
@@ -49,18 +49,33 @@ public class DerbyDatabaseBean {
               .execute("create table vinyls.images (image_id integer not null, image_loc varchar(200) not null, vinyl_id integer not null, primary key (image_id))");
       jdbcTemplate
               .execute("alter table vinyls.images add constraint vinyls_images_fk_1 foreign key (vinyl_id) references vinyls.vinyls (vinyl_id)");
+      jdbcTemplate
+              .execute("create function vinyls.add_vinyl(vinyl_uuid VARCHAR( 32672 ),artist_uuid VARCHAR( 32672 ),artist VARCHAR( 32672 ), album VARCHAR( 32672 ), release_year VARCHAR( 32672 )) " +
+                      "RETURNS INT " +
+                      "LANGUAGE JAVA " +
+                      "PARAMETER STYLE JAVA " +
+                      "NO SQL " +
+                      "EXTERNAL NAME 'com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.DerbyFunction.addVinyl'");
+
+   }
+
+   public void modify() throws Exception {
+      jdbcTemplate
+              .execute("alter table vinyls.images add constraint vinyls_images_fk_1 foreign key (vinyl_id) references vinyls.vinyls (vinyl_id)");
    }
 
    public void destroy() throws Exception {
 
       try {
-         jdbcTemplate.execute("drop table vinyls.vinyls");
-         jdbcTemplate.execute("drop table vinyls.artists");
-         jdbcTemplate.execute("drop table vinyls.albums");
-         jdbcTemplate.execute("drop table vinyls.songs");
          jdbcTemplate.execute("drop table vinyls.images");
-         jdbcTemplate.execute("drop schema vinyls");
+         jdbcTemplate.execute("drop table vinyls.songs");
+         jdbcTemplate.execute("drop table vinyls.albums");
+         jdbcTemplate.execute("drop table vinyls.artists");
+         jdbcTemplate.execute("drop table vinyls.vinyls");
+         jdbcTemplate.execute("drop function vinyls.add_vinyl");
+         jdbcTemplate.execute("drop schema vinyls restrict");
       } catch (Throwable e) {
+         System.out.println(e.getCause());
          // ignore
       }
    }

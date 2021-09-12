@@ -1,4 +1,4 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.local;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.legacy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
