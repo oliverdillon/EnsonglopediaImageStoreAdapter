@@ -20,9 +20,9 @@ public class PingEndpointTest {
     protected MockEndpoint ping;
 
     @Autowired
-    ProducerTemplate template;
+    protected ProducerTemplate template;
 
-    private static final String OPERATION_SUCCEEDED = "{"
+    private final String OPERATION_SUCCEEDED = "{"
             + "\"success\": true,"
             + "\"message\": \"Operation succeeded.\","
             + "\"token\": \"%s\""
