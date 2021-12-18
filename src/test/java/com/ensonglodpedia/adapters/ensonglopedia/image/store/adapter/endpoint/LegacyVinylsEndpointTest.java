@@ -23,10 +23,16 @@ import static org.junit.Assert.assertEquals;
 public class LegacyVinylsEndpointTest {
 
     @EndpointInject("mock:legacyVinyls")
-    protected MockEndpoint ping;
+    protected MockEndpoint legacyVinyls;
 
     @Autowired
     ProducerTemplate template;
+
+    private final String OPERATION_SUCCEEDED = "{"
+            + "\"success\": true,"
+            + "\"message\": \"Operation succeeded.\","
+            + "\"token\": \"%s\""
+            + "}";
 
     private String initialContent = "{\n" +
             "  \"data\":[\n" +
@@ -186,10 +192,10 @@ public class LegacyVinylsEndpointTest {
                 .replaceAll("[\t\r\n]","")
                 .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
 
-        ping.expectedBodiesReceived(initialContent);
         template.setDefaultEndpointUri("direct:getVinylsLegacyEndpoint");
         template.sendBody("");
-        ping.assertIsSatisfied();
+        legacyVinyls.expectedBodiesReceived(initialContent);
+        legacyVinyls.assertIsSatisfied();
     }
 
     @Test
@@ -209,7 +215,8 @@ public class LegacyVinylsEndpointTest {
 
         template.setDefaultEndpointUri("direct:postVinylsLegacyEndpoint");
         template.sendBody(body);
-        ping.assertIsSatisfied();
+        legacyVinyls.expectedBodiesReceived(OPERATION_SUCCEEDED);
+        legacyVinyls.assertIsSatisfied();
 
         String fileName = "data.json";
         File jsonFile = new File("files/input/"+fileName);
@@ -239,7 +246,8 @@ public class LegacyVinylsEndpointTest {
 
         template.setDefaultEndpointUri("direct:postVinylsLegacyEndpoint");
         template.sendBody(body);
-        ping.assertIsSatisfied();
+        legacyVinyls.expectedBodiesReceived(OPERATION_SUCCEEDED);
+        legacyVinyls.assertIsSatisfied();
 
         String fileName = "data.json";
         File jsonFile = new File("files/input/"+fileName);
