@@ -21,6 +21,7 @@ public class DerbyDatabaseBean {
    public void create() throws Exception {
 
       try {
+         jdbcTemplate.execute("drop function vinyls.add_vinyl");
          jdbcTemplate.execute("drop table vinyls.images");
          jdbcTemplate.execute("drop table vinyls.songs");
          jdbcTemplate.execute("drop table vinyls.albums");
@@ -67,12 +68,12 @@ public class DerbyDatabaseBean {
    public void destroy() throws Exception {
 
       try {
+         jdbcTemplate.execute("drop function vinyls.add_vinyl");
          jdbcTemplate.execute("drop table vinyls.images");
          jdbcTemplate.execute("drop table vinyls.songs");
          jdbcTemplate.execute("drop table vinyls.albums");
          jdbcTemplate.execute("drop table vinyls.artists");
          jdbcTemplate.execute("drop table vinyls.vinyls");
-         jdbcTemplate.execute("drop function vinyls.add_vinyl");
          jdbcTemplate.execute("drop schema vinyls restrict");
       } catch (Throwable e) {
          System.out.println(e.getCause());
