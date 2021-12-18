@@ -33,6 +33,6 @@ public class PostVinylsRoute extends RouteBuilder {
 //                        "'Purple Rain'," +
 //                        "1984)")
                 .setBody(constant(OPERATION_SUCCEEDED))
-                .to("mock:mockVinylsEndpoint");
+                .to("mock:vinyls");
     }
 }

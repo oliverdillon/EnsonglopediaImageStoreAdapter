@@ -4,20 +4,26 @@ import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.viny
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls.PostVinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.IntegrationConfig;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.TestIntegration;
+import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
-import org.junit.jupiter.api.Test;
+import org.apache.camel.component.mock.MockEndpoint;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * Test case for testing the execution of the SQL component-based route for
@@ -33,22 +39,32 @@ import static org.junit.Assert.assertEquals;
 @ActiveProfiles("test")
 public class NewVinylRouteTest {
 
-   String json = "[\n" +
+   private final String OPERATION_SUCCEEDED = "{"
+           + "\"success\": true,"
+           + "\"message\": \"Operation succeeded.\","
+           + "\"token\": \"%s\""
+           + "}";
+   private String local_vinyl_id_1 = UUID.randomUUID().toString();
+   private String local_vinyl_id_2 = UUID.randomUUID().toString();
+   private String json = "[\n" +
            "  {\n" +
-           "    \"imgs\": null,\n" +
-           "    \"vinyl_id\": \"6e8f9e65-dc47-49ce-812d-46c27d106ce9\",\n" +
-           "    \"artist_name\": \"Prince\",\n" +
-           "    \"album_title\": \"Purple Rain\",\n" +
-           "    \"year\": \"1984\"\n" +
+           "    \"VINYL_ID\": \""+local_vinyl_id_1+"\",\n" +
+           "    \"ARTIST_NAME\": \"Prince\",\n" +
+           "    \"ALBUM_TITLE\": \"Purple_Rain\",\n" +
+           "    \"RELEASE_YEAR\": \"1984\",\n" +
+           "    \"IMGS\": null\n" +
            "  },\n" +
            "  {\n" +
-           "    \"imgs\": null,\n" +
-           "    \"vinyl_id\": \"005da771-7f72-4e3e-8ccf-d1753c17b57f\",\n" +
-           "    \"artist_name\": \"Finneas\",\n" +
-           "    \"album_title\": \"Blood Harmony\",\n" +
-           "    \"year\": \"2020\"\n" +
+           "    \"VINYL_ID\": \""+local_vinyl_id_2+"\",\n" +
+           "    \"ARTIST_NAME\": \"Finneas\",\n" +
+           "    \"ALBUM_TITLE\": \"Blood_Harmony\",\n" +
+           "    \"RELEASE_YEAR\": \"2020\",\n" +
+           "    \"IMGS\": null\n" +
            "  }\n" +
            "]";
+
+   @EndpointInject("mock:vinyls")
+   protected MockEndpoint vinyl;
 
    @Autowired
    ProducerTemplate template;
@@ -56,41 +72,63 @@ public class NewVinylRouteTest {
    @Inject
    private JdbcTemplate jdbcTemplate;
 
-   String local_vinyl_id = UUID.randomUUID().toString();
 
-   String local_artist_id = UUID.randomUUID().toString();
+   @Before
+   public void setUp() throws Exception {
+      add_vinyl(local_vinyl_id_1,"Prince", "Purple_Rain", 1984);
+      add_vinyl(local_vinyl_id_2, "Finneas", "Blood_Harmony", 2020);
+   }
 
-//   @Before
-//   public void setUp() throws Exception {
-//      add_vinyl("Prince", "Purple Rain", 1984);
-//      add_vinyl("Finneas", "Blood Harmony", 2020);
-//   }
+   public void add_vinyl(String vinyl_id, String artist_name, String album_title, int release_year){
+      String local_artist_id = UUID.randomUUID().toString();
+      jdbcTemplate
+              .update("insert into vinyls.vinyls(vinyl_id) values (?)",
+                      vinyl_id);
+      jdbcTemplate
+              .update("insert into vinyls.artists(artist_id, artist_name) values (?, ?)",
+                      local_artist_id,artist_name);
+      jdbcTemplate
+              .update("insert into vinyls.albums(vinyl_id, album_title, release_year, artist_id) values (?,?,?,?)",
+                      vinyl_id,album_title,release_year,local_artist_id);
+   }
 
-//   public void add_vinyl(String local_artist_name, String local_album_title, int local_release_year){
-//      // Insert catalog and customer data
-//      jdbcTemplate
-//              .execute("insert into vinyls.vinyls(vinyl_id) values ("+local_vinyl_id+");");
-//      jdbcTemplate
-//              .execute("insert into vinyls.artists(artist_id, artist_name) values ('"+local_artist_id+"', '"+local_artist_name+"');");
-//      jdbcTemplate
-//              .execute("insert into vinyls.albums(vinyl_id, year, artist_id, album_title) values ('"+local_vinyl_id+"', '"+local_release_year+"', '"+local_artist_id+"', '"+local_album_title+"');");
-//   }
-
-//   @After
-//   public void tearDown() throws Exception {
-//      jdbcTemplate.execute("delete from vinyls.vinyls");
-//      jdbcTemplate.execute("delete from vinyls.artists");
-//      jdbcTemplate.execute("delete from vinyls.albums");
-//      jdbcTemplate.execute("delete from vinyls.songs");
-//      jdbcTemplate.execute("delete from vinyls.images");
-//   }
+   @After
+   public void tearDown() throws Exception {
+      jdbcTemplate.execute("delete from vinyls.images");
+      jdbcTemplate.execute("delete from vinyls.songs");
+      jdbcTemplate.execute("delete from vinyls.albums");
+      jdbcTemplate.execute("delete from vinyls.artists");
+      jdbcTemplate.execute("delete from vinyls.vinyls");
+   }
 
    @Test
-   public void testVinylRouteSuccess() throws Exception {
-      System.out.println("Hello");
-      assertEquals(true, true);
-//      vinyl.expectedBodiesReceived(json);
-//      template.sendBody("direct:postVinylsEndpoint",null);
-//      vinyl.assertIsSatisfied();
+   @DirtiesContext
+   public void testGetVinylRouteSuccess() throws Exception {
+      json = json
+              .replaceAll(" ","")
+              .replaceAll("[\t\r\n]","")
+              .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
+      vinyl.expectedBodiesReceived(json);
+      template.sendBody("direct:getVinylsEndpoint",null);
+      vinyl.assertIsSatisfied();
+   }
+
+   @Test
+   @DirtiesContext
+   public void testPostVinylRouteSuccess() throws Exception {
+
+      template.setDefaultEndpointUri("direct:postVinylsEndpoint");
+
+      Map<String,Object> headers =new HashMap<>();
+      headers.put("Artist_Name","Hello");
+      headers.put("Album_Title","Example");
+      headers.put("Release_Year","2020");
+      template.sendBodyAndHeaders(null,headers);
+      jdbcTemplate
+              .queryForList("select vinyl_id, artist_name, album_title, release_year from vinyls.albums" +
+                      " inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id");
+
+      vinyl.expectedBodiesReceived(json);
+      vinyl.assertIsSatisfied();
    }
 }

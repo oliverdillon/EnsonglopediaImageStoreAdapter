@@ -7,8 +7,9 @@ import java.sql.SQLException;
 
 public class DerbyFunction {
 
-    public static void addVinyl(String vinyl_uuid,String artist_uuid,String artist,String album,
-                                String release_year) throws SQLException {
+    public static int addVinyl(String vinyl_uuid,String artist_uuid,String artist,String album,
+                                int release_year) throws SQLException {
+        return 0;
 
     }
 
