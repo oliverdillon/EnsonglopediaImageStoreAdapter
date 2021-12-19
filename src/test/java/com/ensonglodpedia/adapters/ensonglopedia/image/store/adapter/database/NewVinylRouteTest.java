@@ -21,8 +21,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 /**
@@ -124,10 +127,28 @@ public class NewVinylRouteTest {
       headers.put("Album_Title","Example");
       headers.put("Release_Year","2020");
       template.sendBodyAndHeaders(null,headers);
-      jdbcTemplate
+      List<Map<String, Object>> vinylInfo = jdbcTemplate
               .queryForList("select vinyl_id, artist_name, album_title, release_year from vinyls.albums" +
                       " inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id");
       vinyl.expectedBodiesReceived(json);
       vinyl.assertIsSatisfied();
+
+      String[] artistNames = {"Prince","Finneas","Hello"};
+      String[] albumTitles = {"Purple_Rain","Blood_Harmony","Example"};
+      String[] releaseYear = { "1984", "2020", "2020" };
+
+      for(int i =0; i< releaseYear.length; i++){
+         assertThat(vinylInfo.get(i))
+                 .extracting("Artist_Name")
+                 .isEqualTo(artistNames[i]);
+
+         assertThat(vinylInfo.get(i))
+                 .extracting("Album_Title")
+                 .isEqualTo(albumTitles[i]);
+
+         assertThat(vinylInfo.get(i))
+                 .extracting("Release_Year")
+                 .isEqualTo(releaseYear[i]);
+      }
    }
 }
