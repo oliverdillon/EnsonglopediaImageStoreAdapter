@@ -13,52 +13,52 @@ public class Vinyl {
     private String release_year;
     private List<String> imgs;
 
-    @JsonProperty("VINYL_ID")
+    @JsonProperty("vinyl_id")
     public String getVinyl_id() {
         return vinyl_id;
     }
 
-    @JsonProperty("VINYL_ID")
+    @JsonProperty("vinyl_id")
     public void setVinyl_id(String vinyl_id) {
         this.vinyl_id = vinyl_id;
     }
 
-    @JsonProperty("ARTIST_NAME")
+    @JsonProperty("artist_name")
     public String getArtist_name() {
         return artist_name;
     }
 
-    @JsonProperty("ARTIST_NAME")
+    @JsonProperty("artist_name")
     public void setArtist_name(String artist_name) {
         this.artist_name = artist_name;
     }
 
-    @JsonProperty("ALBUM_TITLE")
+    @JsonProperty("album_title")
     public String getAlbum_title() {
         return album_title;
     }
 
-    @JsonProperty("ALBUM_TITLE")
+    @JsonProperty("album_title")
     public void setAlbum_title(String album_title) {
         this.album_title = album_title;
     }
 
-    @JsonProperty("RELEASE_YEAR")
+    @JsonProperty("release_year")
     public String getRelease_year() {
         return release_year;
     }
 
-    @JsonProperty("RELEASE_YEAR")
+    @JsonProperty("release_year")
     public void setRelease_year(String release_year) {
         this.release_year = release_year;
     }
 
-    @JsonProperty("IMGS")
+    @JsonProperty("imgs")
     public List<String> getImgs() {
         return imgs;
     }
 
-    @JsonProperty("IMGS")
+    @JsonProperty("imgs")
     public void setImgs(List<String> imgs) {
         this.imgs = imgs;
     }

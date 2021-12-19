@@ -13,12 +13,13 @@ public class GetVinylProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         String vinylData = exchange.getMessage().getBody(String.class);
-        vinylData = vinylData
-                .replaceAll(" ","")
-                .replaceAll("=","\\\":\\\"")
-                .replaceAll(",","\\\",\\\"")
-                .replaceAll("\\\"?\\{","\\{\\\"")
-                .replaceAll("\\}\\\"?","\\\"\\}");
+//        vinylData = vinylData
+//                .replaceAll(" ","")
+//                .replaceAll("=","\\\":\\\"")
+//                .replaceAll(",","\\\",\\\"")
+//                .replaceAll("\\\"?\\{","\\{\\\"")
+//                .replaceAll("\\}\\\"?","\\\"\\}")
+//                .replaceAll("\"\"","\"\"");
         List<Vinyl> vinylObject = objectMapper.readValue(vinylData, new TypeReference<List<Vinyl>>(){});
 
         exchange.getMessage().setBody(vinylObject);
