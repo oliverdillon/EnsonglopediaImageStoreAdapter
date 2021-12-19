@@ -23,7 +23,7 @@ public class SqlBuilderProcessor implements Processor {
         String album = exchange.getMessage().getHeader("Album_Title",String.class);
         int year = exchange.getMessage().getHeader("Release_Year",int.class);
 
-        String query = "VALUES vinyls.add_vinyl('" +vinyl_uuid+"'," +
+        String query = "call vinyls.add_vinyl('" +vinyl_uuid+"'," +
                 "'" + artist_uuid + "'," +
                 "'" + artist + "'," +
                 "'" + album +"'," +

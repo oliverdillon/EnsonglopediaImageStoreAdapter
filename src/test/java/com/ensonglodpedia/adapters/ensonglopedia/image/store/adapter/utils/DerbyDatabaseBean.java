@@ -33,31 +33,29 @@ public class DerbyDatabaseBean {
 
       jdbcTemplate.execute("CREATE SCHEMA vinyls");
       jdbcTemplate
-              .execute("create table vinyls.vinyls (vinyl_id VARCHAR( 32672 ) not null, primary key (vinyl_id))");
+              .execute("create table vinyls.vinyls (vinyl_id VARCHAR( 200 ) not null, primary key (vinyl_id))");
       jdbcTemplate
-              .execute("create table vinyls.artists (artist_id VARCHAR( 32672 ) not null, artist_name varchar(200) not null, primary key (artist_id))");
+              .execute("create table vinyls.artists (artist_id VARCHAR( 200 ) not null, artist_name varchar(200) not null, primary key (artist_id))");
       jdbcTemplate
-              .execute("create table vinyls.albums (vinyl_id VARCHAR( 32672 ) not null, album_title varchar(200) not null, artist_id VARCHAR( 32672 ) not null, release_year VARCHAR( 32672 ) not null, primary key (vinyl_id))");
+              .execute("create table vinyls.albums (vinyl_id VARCHAR( 200 ) not null, album_title varchar(200) not null, artist_id VARCHAR( 200 ) not null, release_year VARCHAR( 200 ) not null, primary key (vinyl_id))");
       jdbcTemplate
               .execute("alter table vinyls.albums add constraint vinyls_albums_fk_1 foreign key (vinyl_id) references vinyls.vinyls (vinyl_id)");
       jdbcTemplate
               .execute("alter table vinyls.albums add constraint vinyls_albums_fk_2 foreign key (artist_id) references vinyls.artists (artist_id)");
       jdbcTemplate
-              .execute("create table vinyls.songs (song_id VARCHAR( 32672 ) not null, song_title varchar(200) not null, vinyl_id VARCHAR( 32672 ) not null, primary key (song_id))");
+              .execute("create table vinyls.songs (song_id VARCHAR( 200 ) not null, song_title varchar(200) not null, vinyl_id VARCHAR( 200 ) not null, primary key (song_id))");
       jdbcTemplate
               .execute("alter table vinyls.songs add constraint vinyls_songs_fk_1 foreign key (vinyl_id) references vinyls.albums (vinyl_id)");
       jdbcTemplate
-              .execute("create table vinyls.images (image_id VARCHAR( 32672 ) not null, image_loc varchar(200) not null, vinyl_id VARCHAR( 32672 ) not null, primary key (image_id))");
+              .execute("create table vinyls.images (image_id VARCHAR( 200 ) not null, image_loc varchar(200) not null, vinyl_id VARCHAR( 200 ) not null, primary key (image_id))");
       jdbcTemplate
               .execute("alter table vinyls.images add constraint vinyls_images_fk_1 foreign key (vinyl_id) references vinyls.vinyls (vinyl_id)");
       jdbcTemplate
-              .execute("create function vinyls.add_vinyl(vinyl_uuid VARCHAR( 32672 ),artist_uuid VARCHAR( 32672 ),artist VARCHAR( 32672 ), album VARCHAR( 32672 ), release_year INT) " +
-                      "RETURNS INT " +
+              .execute("CREATE PROCEDURE vinyls.add_vinyl(vinyl_uuid VARCHAR( 200 ),artist_uuid VARCHAR( 200 ),artist_name VARCHAR( 200 ), album_title VARCHAR( 200 ), release_year INT) " +
                       "LANGUAGE JAVA " +
                       "PARAMETER STYLE JAVA " +
-                      "NO SQL " +
+                      "MODIFIES SQL DATA " +
                       "EXTERNAL NAME 'com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.DerbyFunction.addVinyl'");
-
    }
 
    public void modify() throws Exception {

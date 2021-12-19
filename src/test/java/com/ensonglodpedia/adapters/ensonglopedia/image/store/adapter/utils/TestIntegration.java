@@ -39,7 +39,7 @@ public class TestIntegration {
    public DataSource dataSource() {
       BasicDataSource dataSource = new BasicDataSource();
       dataSource.setDriverClassName(EmbeddedDriver.class.getName());
-      dataSource.setUrl("jdbc:derby:memory:orders;create=true");
+      dataSource.setUrl("jdbc:derby:memory:vinyls;create=true");
       return dataSource;
    }
 

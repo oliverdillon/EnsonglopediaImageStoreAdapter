@@ -127,7 +127,6 @@ public class NewVinylRouteTest {
       jdbcTemplate
               .queryForList("select vinyl_id, artist_name, album_title, release_year from vinyls.albums" +
                       " inner join vinyls.artists on vinyls.albums.artist_id=vinyls.artists.artist_id");
-
       vinyl.expectedBodiesReceived(json);
       vinyl.assertIsSatisfied();
    }
