@@ -6,11 +6,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.UUID;
 
-public class SqlBuilderProcessor implements Processor {
+public class PostVinylProcessor implements Processor {
 
     public JdbcTemplate jdbcTemplate;
 
-    public SqlBuilderProcessor(JdbcTemplate jdbcTemplate){
+    public PostVinylProcessor(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate = jdbcTemplate;
     }
 

@@ -1,8 +1,7 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SqlBuilderProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.PostVinylProcessor;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.sql.SqlComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ public class PostVinylsRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("direct:postVinylsEndpoint")
-                .process(new SqlBuilderProcessor(jdbcTemplate))
+                .process(new PostVinylProcessor(jdbcTemplate))
 //                .to("sql:select vinyls.add_vinyl('" +vinyl_uuid+"'," +
 //                        "'" +artist_uuid+"'," +
 //                        "'Prince'," +
