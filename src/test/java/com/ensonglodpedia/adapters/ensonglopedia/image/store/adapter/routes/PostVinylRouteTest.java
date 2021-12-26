@@ -1,6 +1,5 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.database;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls.GetVinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.vinyls.PostVinylsRoute;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.IntegrationConfig;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.TestIntegration;
@@ -28,25 +27,12 @@ import java.util.UUID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
-/**
- * Test case for testing the execution of the SQL component-based route for
- * routing orders from the orders database to a log component.
- *
- * @author Michael Hoffman, Pluralsight
- *
- */
 @RunWith(SpringJUnit4ClassRunner.class)
-//@SpringBootTest
 @ContextConfiguration(classes = { TestIntegration.class,
-        IntegrationConfig.class, GetVinylsRoute.class, PostVinylsRoute.class })
+        IntegrationConfig.class, PostVinylsRoute.class })
 @ActiveProfiles("test")
-public class NewVinylRouteTest {
+public class PostVinylRouteTest {
 
-   private final String OPERATION_SUCCEEDED = "{"
-           + "\"success\": true,"
-           + "\"message\": \"Operation succeeded.\","
-           + "\"token\": \"%s\""
-           + "}";
    private String local_vinyl_id_1 = UUID.randomUUID().toString();
    private String local_vinyl_id_2 = UUID.randomUUID().toString();
    private String json = "[\n" +
@@ -102,18 +88,6 @@ public class NewVinylRouteTest {
       jdbcTemplate.execute("delete from vinyls.albums");
       jdbcTemplate.execute("delete from vinyls.artists");
       jdbcTemplate.execute("delete from vinyls.vinyls");
-   }
-
-   @Test
-   @DirtiesContext
-   public void testGetVinylRouteSuccess() throws Exception {
-      json = json
-              .replaceAll(" ","")
-              .replaceAll("[\t\r\n]","")
-              .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
-      vinyl.expectedBodiesReceived(json);
-      template.sendBody("direct:getVinylsEndpoint",null);
-      vinyl.assertIsSatisfied();
    }
 
    @Test

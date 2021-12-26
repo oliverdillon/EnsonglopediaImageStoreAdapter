@@ -1,26 +1,33 @@
-package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.endpoint;
+package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes.legacy.LocalVinylsRoute;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.IntegrationConfig;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.utils.TestIntegration;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = { TestIntegration.class,
+        IntegrationConfig.class, LocalVinylsRoute.class})
 @SpringBootTest
-@ContextConfiguration
 @ActiveProfiles("test")
-public class LegacyVinylsEndpointTest {
+public class LegacyVinylsRouteTest {
 
     @EndpointInject("mock:legacyVinyls")
     protected MockEndpoint legacyVinyls;
@@ -176,7 +183,7 @@ public class LegacyVinylsEndpointTest {
             "  ]\n" +
             "}";
 
-    @BeforeEach
+    @Before
     public void resetJsonData () throws IOException, InterruptedException {
         String fileName = "data.json";
         File jsonFile = new File("files/input/"+fileName);

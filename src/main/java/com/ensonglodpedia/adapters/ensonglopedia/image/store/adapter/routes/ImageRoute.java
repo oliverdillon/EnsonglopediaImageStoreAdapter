@@ -1,9 +1,10 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.routes;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.PostImageLocProcessor;
-import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.legacy.LocalImagePostRequestProcessor;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.PostImageResponseProcessor;
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes.SimpleLoggingProcessor;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -42,8 +43,12 @@ public class ImageRoute extends RouteBuilder {
                         .to("file:"+fileDirectory+"?fileName=${header.Filename}.jpeg")
                         .setProperty("Success",constant(true))
                 .end()
-                .process(new LocalImagePostRequestProcessor())
-                .process(new PostImageLocProcessor(jdbcTemplate))
+                .process(new PostImageResponseProcessor())
+                .choice()
+                    .when(exchangeProperty("Success").isEqualTo(true))
+                    .process(new PostImageLocProcessor(jdbcTemplate))
+                .end()
+                .marshal().json(JsonLibrary.Jackson)
                 .to("mock:images");
     }
 }
