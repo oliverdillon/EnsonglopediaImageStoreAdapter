@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -41,41 +42,48 @@ public class LegacyVinylsRouteTest {
             + "\"token\": \"%s\""
             + "}";
 
+    private String vinyl_id_1 = UUID.randomUUID().toString();
+    private String vinyl_id_2 = UUID.randomUUID().toString();
+    private String vinyl_id_3 = UUID.randomUUID().toString();
+    private String vinyl_id_4 = UUID.randomUUID().toString();
+    private String vinyl_id_5 = UUID.randomUUID().toString();
+    private String vinyl_id_6 = UUID.randomUUID().toString();
+
     private String initialContent = "{\n" +
             "  \"data\":[\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"0\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_1+"\",\n" +
             "      \"artist_name\": \"\",\n" +
             "      \"album_title\": \"\",\n" +
-            "      \"year\": \"\",\n" +
+            "      \"release_year\": \"\",\n" +
             "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"1\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_2+"\",\n" +
             "      \"artist_name\": \"Prince\",\n" +
             "      \"album_title\": \"Purple Rain\",\n" +
-            "      \"year\": \"1984\",\n" +
+            "      \"release_year\": \"1984\",\n" +
             "      \"imgs\": [\"/assets/Purple_Rain.jpg\",\"/assets/Purple_Rain_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"2\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_3+"\",\n" +
             "      \"artist_name\": \"Finneas\",\n" +
             "      \"album_title\": \"Blood Harmony\",\n" +
-            "      \"year\": \"2019\",\n" +
+            "      \"release_year\": \"2019\",\n" +
             "      \"imgs\": [\"/assets/Blood_Harmony.png\",\"/assets/Blood_Harmony_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"3\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_4+"\",\n" +
             "      \"artist_name\": \"Eagles\",\n" +
             "      \"album_title\": \"Hotel California\",\n" +
-            "      \"year\": \"1976\",\n" +
+            "      \"release_year\": \"1976\",\n" +
             "      \"imgs\": [\"/assets/Hotel_California.jpg\",\"/assets/Hotel_California_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"4\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_5+"\",\n" +
             "      \"artist_name\": \"Eagles\",\n" +
             "      \"album_title\": \"Eagles\",\n" +
-            "      \"year\": \"1972\",\n" +
+            "      \"release_year\": \"1972\",\n" +
             "      \"imgs\": [\"/assets/Eagles.jpeg\"]\n" +
             "    }\n" +
             "  ]\n" +
@@ -84,45 +92,45 @@ public class LegacyVinylsRouteTest {
     private String addedContent = "{\n" +
             "  \"data\":[\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"0\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_1+"\",\n" +
             "      \"artist_name\": \"\",\n" +
             "      \"album_title\": \"\",\n" +
-            "      \"year\": \"\",\n" +
+            "      \"release_year\": \"\",\n" +
             "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"1\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_2+"\",\n" +
             "      \"artist_name\": \"Prince\",\n" +
             "      \"album_title\": \"Purple Rain\",\n" +
-            "      \"year\": \"1984\",\n" +
+            "      \"release_year\": \"1984\",\n" +
             "      \"imgs\": [\"/assets/Purple_Rain.jpg\",\"/assets/Purple_Rain_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"2\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_3+"\",\n" +
             "      \"artist_name\": \"Finneas\",\n" +
             "      \"album_title\": \"Blood Harmony\",\n" +
-            "      \"year\": \"2019\",\n" +
+            "      \"release_year\": \"2019\",\n" +
             "      \"imgs\": [\"/assets/Blood_Harmony.png\",\"/assets/Blood_Harmony_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"3\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_4+"\",\n" +
             "      \"artist_name\": \"Eagles\",\n" +
             "      \"album_title\": \"Hotel California\",\n" +
-            "      \"year\": \"1976\",\n" +
+            "      \"release_year\": \"1976\",\n" +
             "      \"imgs\": [\"/assets/Hotel_California.jpg\",\"/assets/Hotel_California_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"4\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_5+"\",\n" +
             "      \"artist_name\": \"Eagles\",\n" +
             "      \"album_title\": \"Eagles\",\n" +
-            "      \"year\": \"1972\",\n" +
+            "      \"release_year\": \"1972\",\n" +
             "      \"imgs\": [\"/assets/Eagles.jpeg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"5\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_6+"\",\n" +
             "      \"artist_name\": \"Hello\",\n" +
             "      \"album_title\": \"example album_title\",\n" +
-            "      \"year\": \"2020\",\n" +
+            "      \"release_year\": \"2020\",\n" +
             "      \"imgs\": [\n" +
             "        \"/assets/Add_Record_Button.jpg\"\n" +
             "      ]\n" +
@@ -133,49 +141,49 @@ public class LegacyVinylsRouteTest {
     private String editedContent = "{\n" +
             "  \"data\": [\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"0\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_1+"\",\n" +
             "      \"artist_name\": \"Hello\",\n" +
             "      \"album_title\": \"example album_title\",\n" +
-            "      \"year\": \"2020\",\n" +
+            "      \"release_year\": \"2020\",\n" +
             "      \"imgs\": [\n" +
             "        \"/assets/Add_Record_Button.jpg\"\n" +
             "      ]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"1\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_2+"\",\n" +
             "      \"artist_name\": \"Prince\",\n" +
             "      \"album_title\": \"Purple Rain\",\n" +
-            "      \"year\": \"1984\",\n" +
+            "      \"release_year\": \"1984\",\n" +
             "      \"imgs\": [\n" +
             "        \"/assets/Purple_Rain.jpg\",\n" +
             "        \"/assets/Purple_Rain_Back.jpg\"\n" +
             "      ]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"2\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_3+"\",\n" +
             "      \"artist_name\": \"Finneas\",\n" +
             "      \"album_title\": \"Blood Harmony\",\n" +
-            "      \"year\": \"2019\",\n" +
+            "      \"release_year\": \"2019\",\n" +
             "      \"imgs\": [\n" +
             "        \"/assets/Blood_Harmony.png\",\n" +
             "        \"/assets/Blood_Harmony_Back.jpg\"\n" +
             "      ]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"3\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_4+"\",\n" +
             "      \"artist_name\": \"Eagles\",\n" +
             "      \"album_title\": \"Hotel California\",\n" +
-            "      \"year\": \"1976\",\n" +
+            "      \"release_year\": \"1976\",\n" +
             "      \"imgs\": [\n" +
             "        \"/assets/Hotel_California.jpg\",\n" +
             "        \"/assets/Hotel_California_Back.jpg\"\n" +
             "      ]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"4\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_5+"\",\n" +
             "      \"artist_name\": \"Eagles\",\n" +
             "      \"album_title\": \"Eagles\",\n" +
-            "      \"year\": \"1972\",\n" +
+            "      \"release_year\": \"1972\",\n" +
             "      \"imgs\": [\n" +
             "        \"/assets/Eagles.jpeg\"\n" +
             "      ]\n" +
@@ -209,10 +217,10 @@ public class LegacyVinylsRouteTest {
     @DirtiesContext
     public void postVinylsShouldReturnDefaultMessage() throws Exception {
         String body = "{\n" +
-                "      \"vinyl_id\": \"5\",\n" +
+                "      \"vinyl_id\": \""+vinyl_id_6+"\",\n" +
                 "      \"artist_name\": \"Hello\",\n" +
                 "      \"album_title\": \"example album_title\",\n" +
-                "      \"year\": \"2020\",\n" +
+                "      \"release_year\": \"2020\",\n" +
                 "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
                 "    }";
 
@@ -233,17 +241,17 @@ public class LegacyVinylsRouteTest {
                 .replaceAll("[\t\r\n]","")
                 .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
 
-        assertEquals(storedjson, addedContent);
+        assertEquals(addedContent,storedjson);
     }
 
     @Test
     @DirtiesContext
     public void postVinylsEditExistingValues() throws Exception {
         String body = "{\n" +
-                "      \"vinyl_id\": \"0\",\n" +
+                "      \"vinyl_id\": \""+vinyl_id_1+"\",\n" +
                 "      \"artist_name\": \"Hello\",\n" +
                 "      \"album_title\": \"example album_title\",\n" +
-                "      \"year\": \"2020\",\n" +
+                "      \"release_year\": \"2020\",\n" +
                 "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
                 "    }";
 

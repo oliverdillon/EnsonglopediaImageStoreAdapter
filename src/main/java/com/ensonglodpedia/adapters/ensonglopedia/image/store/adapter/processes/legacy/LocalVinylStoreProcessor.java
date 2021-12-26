@@ -6,15 +6,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class LocalVinylStoreProcessor implements Processor {
+
+    private String fileDirectory;
+
+    public LocalVinylStoreProcessor(String fileDirectory) {
+        this.fileDirectory = fileDirectory;
+    }
+
     @Override
     public void process(Exchange exchange) throws Exception {
-        File jsonFile = new File("files/input/data.json");
+        File jsonFile = new File(fileDirectory);
         ObjectMapper objectMapper = new ObjectMapper();
 
         //preexisting vinyls

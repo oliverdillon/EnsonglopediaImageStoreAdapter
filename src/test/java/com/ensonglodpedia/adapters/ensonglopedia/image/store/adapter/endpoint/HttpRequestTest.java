@@ -30,6 +30,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,41 +62,47 @@ public class HttpRequestTest extends AbstractTest {
             + "\"token\":\"%s\""
             + "}";
 
-    private static String expectedContent = "{\n" +
+    private String vinyl_id_1 = UUID.randomUUID().toString();
+    private String vinyl_id_2 = UUID.randomUUID().toString();
+    private String vinyl_id_3 = UUID.randomUUID().toString();
+    private String vinyl_id_4 = UUID.randomUUID().toString();
+    private String vinyl_id_5 = UUID.randomUUID().toString();
+
+    private String expectedContent = "{\n" +
             "  \"data\":[\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"0\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_1+"\",\n" +
             "      \"artist_name\": \"\",\n" +
             "      \"album_title\": \"\",\n" +
-            "      \"year\": \"\",\n" +
+            "      \"release_year\": \"0\",\n" +
             "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"1\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_2+"\",\n" +
             "      \"artist_name\": \"Prince\",\n" +
             "      \"album_title\": \"Purple Rain\",\n" +
-            "      \"year\": \"1984\",\n" +
+            "      \"release_year\": \"1984\",\n" +
             "      \"imgs\": [\"/assets/Purple_Rain.jpg\",\"/assets/Purple_Rain_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"2\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_3+"\",\n" +
             "      \"artist_name\": \"Finneas\",\n" +
             "      \"album_title\": \"Blood Harmony\",\n" +
-            "      \"year\": \"2019\",\n" +
+            "      \"release_year\": \"2019\",\n" +
             "      \"imgs\": [\"/assets/Blood_Harmony.png\",\"/assets/Blood_Harmony_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"3\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_4+"\",\n" +
             "      \"artist_name\": \"Eagles\",\n" +
             "      \"album_title\": \"Hotel California\",\n" +
-            "      \"year\": \"1976\",\n" +
+            "      \"release_year\": \"1976\",\n" +
             "      \"imgs\": [\"/assets/Hotel_California.jpg\",\"/assets/Hotel_California_Back.jpg\"]\n" +
             "    },\n" +
             "    {\n" +
-            "      \"vinyl_id\": \"4\",\n" +
+            "      \"vinyl_id\": \""+vinyl_id_5+"\",\n" +
             "      \"artist_name\": \"Eagles\",\n" +
             "      \"album_title\": \"Eagles\",\n" +
-            "      \"year\": \"1972\",\n" +
+            "      \"release_year\": \"1972\",\n" +
             "      \"imgs\": [\"/assets/Eagles.jpeg\"]\n" +
             "    }\n" +
             "  ]\n" +
@@ -109,22 +118,24 @@ public class HttpRequestTest extends AbstractTest {
     @Inject
     private JdbcTemplate jdbcTemplate;
 
-    private String vinyl_id_1 = UUID.randomUUID().toString();
-    private String vinyl_id_2 = UUID.randomUUID().toString();
 
     @Before
     public void setUp() throws Exception {
-        add_vinyl(vinyl_id_1,"Prince", "Purple_Rain",
+        add_vinyl(vinyl_id_1,"", "",
+                0, "/assets/Add_Record_Button.jpg");
+        add_vinyl(vinyl_id_2,"Prince", "Purple Rain",
                 1984, "/assets/Purple_Rain.jpg", "/assets/Purple_Rain_Back.jpg");
-        add_vinyl(vinyl_id_2, "Finneas", "Blood_Harmony",
-                2020,"/assets/Blood_Harmony.jpg", "/assets/Blood_Harmony_Back.jpg");
+        add_vinyl(vinyl_id_3, "Finneas", "Blood Harmony",
+                2019,"/assets/Blood_Harmony.png", "/assets/Blood_Harmony_Back.jpg");
+        add_vinyl(vinyl_id_4, "Eagles", "Hotel California",
+                1976,"/assets/Hotel_California.jpg", "/assets/Hotel_California_Back.jpg");
+        add_vinyl(vinyl_id_5,"Eagles", "Eagles",
+                1972, "/assets/Eagles.jpeg");
     }
 
     public void add_vinyl(String vinyl_id, String artist_name, String album_title, int release_year,
-                          String image_loc_1, String image_loc_2){
+                          String... image_loc_list){
         String artist_id = UUID.randomUUID().toString();
-        String image_id_1 = UUID.randomUUID().toString();
-        String image_id_2 = UUID.randomUUID().toString();
 
         jdbcTemplate
                 .update("insert into vinyls.vinyls(vinyl_id) values (?)",
@@ -135,12 +146,14 @@ public class HttpRequestTest extends AbstractTest {
         jdbcTemplate
                 .update("insert into vinyls.albums(vinyl_id, album_title, release_year, artist_id) values (?,?,?,?)",
                         vinyl_id,album_title,release_year,artist_id);
-        jdbcTemplate
-                .update("insert into vinyls.images(image_id,image_loc,vinyl_id ) values (?,?,?)",
-                        image_id_1, image_loc_1, vinyl_id);
-        jdbcTemplate
-                .update("insert into vinyls.images(image_id,image_loc,vinyl_id ) values (?,?,?)",
-                        image_id_2, image_loc_2, vinyl_id);
+
+        for (String image_loc : image_loc_list){
+            String image_id = UUID.randomUUID().toString();
+            jdbcTemplate
+                    .update("insert into vinyls.images(image_id,image_loc,vinyl_id ) values (?,?,?)",
+                            image_id, image_loc, vinyl_id);
+
+        }
     }
 
     @After
@@ -205,7 +218,7 @@ public class HttpRequestTest extends AbstractTest {
     }
 
     @Test
-    public void getVinylShouldReturnDefaultMessage() throws Exception {
+    public void getLegacyVinylShouldReturnDefaultMessage() throws Exception {
         String response = this.restTemplate.getForObject("http://localhost:" + port + "/rest/legacyVinyls",String.class);
 
         String fileName = "input/data.json";
@@ -221,12 +234,12 @@ public class HttpRequestTest extends AbstractTest {
     }
 
     @Test
-    public void postVinylShouldReturnDefaultMessage(){
+    public void postLegacyVinylShouldReturnDefaultMessage(){
         String body = "{\n" +
                 "      \"vinyl_id\": \"5\",\n" +
                 "      \"artist_name\": \"Hello\",\n" +
                 "      \"album_title\": \"example album\",\n" +
-                "      \"year\": \"2020\",\n" +
+                "      \"release_year\": \"2020\",\n" +
                 "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
                 "    }";
 
@@ -239,12 +252,12 @@ public class HttpRequestTest extends AbstractTest {
     }
 
     @Test
-    public void postVinylShouldOverwrite(){
+    public void postLegacyVinylShouldOverwrite(){
         String body = "{\n" +
                 "      \"vinyl_id\": \"1\",\n" +
                 "      \"artist_name\": \"Hello\",\n" +
                 "      \"album_title\": \"example album\",\n" +
-                "      \"year\": \"2020\",\n" +
+                "      \"release_year\": \"2020\",\n" +
                 "      \"imgs\": [\"/assets/Add_Record_Button.jpg\"]\n" +
                 "    }";
 
@@ -255,4 +268,33 @@ public class HttpRequestTest extends AbstractTest {
         assertThat(response).contains(OPERATION_SUCCEEDED);
 
     }
+
+    @Test
+    public void getVinylShouldReturnDefaultMessage() throws Exception {
+        String response = this.restTemplate.getForObject("http://localhost:" + port + "/rest/vinyls",String.class);
+
+        expectedContent = expectedContent
+                .replaceAll("[\t\r\n]","")
+                .replaceAll("(?<=[:,\"{}\\[\\]])\\s+","");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode expectedNode = objectMapper.readTree(expectedContent);
+        JsonNode responseNode = objectMapper.readTree(response);
+        assertEquals(expectedNode, responseNode);
+    }
+
+    @Test
+    public void postVinylShouldReturnDefaultMessage(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Artist_Name","Hello");
+        headers.add("album_title","example album");
+        headers.add("release_year","2020");
+        HttpEntity request = new HttpEntity(null,headers);
+        String response = this.restTemplate.postForObject("http://localhost:" + port + "/rest/vinyls",
+                request,String.class);
+
+        assertThat(response).contains(OPERATION_SUCCEEDED);
+
+    }
+
 }

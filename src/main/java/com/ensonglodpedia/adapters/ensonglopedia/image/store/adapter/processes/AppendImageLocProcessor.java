@@ -1,6 +1,7 @@
 package com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.processes;
 
 import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.Vinyl;
+import com.ensonglodpedia.adapters.ensonglopedia.image.store.adapter.models.VinylsResponse;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -32,7 +33,11 @@ public class AppendImageLocProcessor implements Processor {
             }
 
             vinyl.setImgs(imageLocs);
+
         }
+        VinylsResponse vinylsResponse = new VinylsResponse();
+        vinylsResponse.setData(vinylList);
+        exchange.getMessage().setBody(vinylsResponse);
     }
 
 }

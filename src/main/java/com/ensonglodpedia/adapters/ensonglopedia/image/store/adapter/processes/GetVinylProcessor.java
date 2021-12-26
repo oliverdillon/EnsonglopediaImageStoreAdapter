@@ -15,13 +15,13 @@ public class GetVinylProcessor implements Processor {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
         String vinylData = exchange.getMessage().getBody(String.class);
-        vinylData = vinylData
-                .replaceAll(" ","")
-                .replaceAll("=","\\\":\\\"")
-                .replaceAll(",","\\\",\\\"")
-                .replaceAll("\\\"?\\{","\\{\\\"")
-                .replaceAll("\\}\\\"?","\\\"\\}")
-                .replaceAll("\"\"","\"\"");
+//        vinylData = vinylData
+//                .replaceAll(" ","")
+//                .replaceAll("=","\\\":\\\"")
+//                .replaceAll(",","\\\",\\\"")
+//                .replaceAll("\\\"?\\{","\\{\\\"")
+//                .replaceAll("\\}\\\"?","\\\"\\}")
+//                .replaceAll("\"\"","\"\"");
         List<Vinyl> vinylObject = objectMapper.readValue(vinylData, new TypeReference<List<Vinyl>>(){});
 
         exchange.getMessage().setBody(vinylObject);

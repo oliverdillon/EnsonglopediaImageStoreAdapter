@@ -14,8 +14,8 @@ public class VinylLegacy  {
     @JsonProperty("album_title")
     private String album_title;
 
-    @JsonProperty("year")
-    private String year;
+    @JsonProperty("release_year")
+    private String release_year;
 
     @JsonProperty("imgs")
     private List<String> imgs;
@@ -44,12 +44,12 @@ public class VinylLegacy  {
         this.album_title = album_title;
     }
 
-    public String getYear() {
-        return year;
+    public String getRelease_year() {
+        return release_year;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setRelease_year(String release_year) {
+        this.release_year = release_year;
     }
 
     public List<String> getImgs() {
@@ -66,7 +66,7 @@ public class VinylLegacy  {
                 "vinyl_id='" + vinyl_id + '\'' +
                 ", artist_name='" + artist_name + '\'' +
                 ", album_title='" + album_title + '\'' +
-                ", year='" + year + '\'' +
+                ", year='" + release_year + '\'' +
                 ", imgs=" + imgs +
                 '}';
     }
