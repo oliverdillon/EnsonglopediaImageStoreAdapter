@@ -6,21 +6,21 @@ import java.util.List;
 
 public class VinylsResponse {
 
-    @JsonProperty("data")
-    public List<Vinyl> data;
+    @JsonProperty("vinyls")
+    public List<Vinyl> vinyls;
 
-    public List<Vinyl> getData() {
-        return data;
+    public List<Vinyl> getVinyls() {
+        return vinyls;
     }
 
-    public void setData(List<Vinyl> data) {
-        this.data = data;
+    public void setVinyls(List<Vinyl> vinyls) {
+        this.vinyls = vinyls;
     }
 
     @Override
     public String toString() {
         return "{" +
-                "data=" + data.toString() +
+                "vinyls=" + vinyls.toString() +
                 '}';
     }
 }

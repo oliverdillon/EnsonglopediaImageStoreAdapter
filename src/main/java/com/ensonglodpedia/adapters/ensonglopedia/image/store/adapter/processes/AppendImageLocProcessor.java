@@ -36,7 +36,7 @@ public class AppendImageLocProcessor implements Processor {
 
         }
         VinylsResponse vinylsResponse = new VinylsResponse();
-        vinylsResponse.setData(vinylList);
+        vinylsResponse.setVinyls(vinylList);
         exchange.getMessage().setBody(vinylsResponse);
     }
 

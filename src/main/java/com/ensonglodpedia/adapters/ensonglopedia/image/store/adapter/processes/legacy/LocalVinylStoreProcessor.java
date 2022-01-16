@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.util.List;
@@ -32,17 +31,17 @@ public class LocalVinylStoreProcessor implements Processor {
         //vinyls to add
         String request = exchange.getMessage().getBody(String.class);
         VinylLegacy vinylNew = objectMapper.readValue(request,VinylLegacy.class);
-        boolean exists = vinyls.getData().stream()
+        boolean exists = vinyls.getVinyls().stream()
                 .anyMatch(vinyl -> vinyl.getVinyl_id().equals(vinylNew.getVinyl_id()));
 
         if(!exists) {
-            vinyls.getData().add(vinylNew);
+            vinyls.getVinyls().add(vinylNew);
         }
         else{
-            List<VinylLegacy> vinylsData = vinyls.getData().stream()
+            List<VinylLegacy> vinylsData = vinyls.getVinyls().stream()
                     .map(vinyl -> vinyl=(vinyl.getVinyl_id().equals(vinylNew.getVinyl_id()))? vinylNew:vinyl)
                     .collect(Collectors.toList());
-            vinyls.setData(vinylsData);
+            vinyls.setVinyls(vinylsData);
         }
         exchange.getMessage().setBody(vinyls);
     }
