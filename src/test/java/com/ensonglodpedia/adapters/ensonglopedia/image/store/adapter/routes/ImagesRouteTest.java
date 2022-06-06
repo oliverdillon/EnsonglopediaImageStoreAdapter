@@ -6,6 +6,7 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.commons.io.FileUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +61,16 @@ public class ImagesRouteTest {
             + "\"location\":null,"
             + "\"token\":\"%s\""
             + "}";
+
+    private static final String IMAGE_POST_REQUEST_TEMPLATE = "{" +
+            "  \"vinyl_uuid\": \"REPLACE_VINYL_UUID\"," +
+            "  \"filename\": \"REPLACE_FILENAME\"," +
+            "  \"file\": \"REPLACE_FILE\"" +
+            "}";
+
+    private static final String IMAGE_GET_REQUEST_TEMPLATE = "{" +
+            "  \"vinyl_uuid\": \"REPLACE_VINYL_UUID\","+
+            "}";
 
     @Before
     public void setUp() throws Exception {
@@ -116,7 +127,8 @@ public class ImagesRouteTest {
         String fileName = "Hotel_California_Back";
         File imageFile = new File("files/input/"+fileName+".jpeg");
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
-        String imageDetails = IMAGE_DETAILS.replaceAll("REPLACE_ASSET_LOCATION","/assets/"+fileName+".jpeg");
+        String imageDetails = IMAGE_DETAILS
+                .replaceAll("REPLACE_ASSET_LOCATION","/assets/"+fileName+".jpeg");
 
         imageMock.expectedBodiesReceived(imageDetails);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
@@ -125,12 +137,18 @@ public class ImagesRouteTest {
         headers.put("Filename",fileName);
         headers.put("vinyl_id",vinyl_id_1);
 
-        template.sendBodyAndHeaders(bytes,headers);
+        String imageRequest = IMAGE_POST_REQUEST_TEMPLATE
+                .replaceAll("REPLACE_VINYL_UUID",vinyl_id_1)
+                .replaceAll("REPLACE_FILENAME",fileName)
+                .replaceAll("REPLACE_FILE",  Base64.encodeBase64String(bytes));
+
+        template.sendBody(imageRequest.replaceAll("\n","\\\\n"));
         imageMock.assertIsSatisfied();
 
         Thread.sleep(10_000L);
         File storedFile = new File("target/"+fileName+".jpeg");
         assertTrue(storedFile.exists());
+        assertTrue(FileUtils.contentEquals(storedFile, imageFile));
 
         List<Map<String, Object>> imageInfo = jdbcTemplate
                 .queryForList("select vinyl_id, image_loc from vinyls.images");
@@ -152,28 +170,6 @@ public class ImagesRouteTest {
 
     @Test
     @DirtiesContext
-    public void getRequestShouldReturnImage() throws Exception {
-        String fileName = "Hotel_California_Back.jpeg";
-        File imageFile = new File("files/input/"+fileName);
-        byte[] bytes = FileUtils.readFileToByteArray(imageFile);
-        File storedFile = new File("files/images/"+fileName);
-        FileUtils.writeByteArrayToFile(storedFile, bytes);
-        Thread.sleep(10_000L);
-        assertTrue(storedFile.exists());
-
-        Map<String, Object> headers = new HashMap<>();
-        headers.put("Filename",fileName);
-        headers.put("vinyl_id",vinyl_id_1);
-
-        imageMock.expectedBodiesReceived(bytes);
-        template.setDefaultEndpointUri("direct:getImageEndpoint");
-        template.sendBodyAndHeaders(bytes,headers);
-        imageMock.assertIsSatisfied();
-
-    }
-
-    @Test
-    @DirtiesContext
     public void shouldSaveWithCorrectExtension() throws Exception {
         String fileName = "Blood_Harmony.png";
         File imageFile = new File("files/input/"+fileName);
@@ -183,16 +179,18 @@ public class ImagesRouteTest {
         imageMock.expectedBodiesReceived(imageDetails);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
 
-        Map<String, Object> headers = new HashMap<>();
-        headers.put("Filename",fileName);
-        headers.put("vinyl_id",vinyl_id_1);
+        String imageRequest = IMAGE_POST_REQUEST_TEMPLATE
+                .replaceAll("REPLACE_VINYL_UUID",vinyl_id_1)
+                .replaceAll("REPLACE_FILENAME",fileName)
+                .replaceAll("REPLACE_FILE",  Base64.encodeBase64String(bytes));
 
-        template.sendBodyAndHeaders(bytes,headers);
+        template.sendBody(imageRequest.replaceAll("\n","\\\\n"));
         imageMock.assertIsSatisfied();
 
         Thread.sleep(10_000L);
         File storedFile = new File("target/"+fileName);
         assertTrue(storedFile.exists());
+        assertTrue(FileUtils.contentEquals(storedFile, imageFile));
     }
 
     @Test
@@ -202,13 +200,15 @@ public class ImagesRouteTest {
         File imageFile = new File("files/input/"+fileName);
         byte[] bytes = FileUtils.readFileToByteArray(imageFile);
 
-        Map<String, Object> headers = new HashMap<>();
-        headers.put("Filename",fileName);
-        headers.put("vinyl_id",vinyl_id_1);
-
         imageMock.expectedBodiesReceived(OPERATION_FAILURE);
         template.setDefaultEndpointUri("direct:postImageEndpoint");
-        template.sendBodyAndHeaders(bytes,headers);
+
+        String imageRequest = IMAGE_POST_REQUEST_TEMPLATE
+                .replaceAll("REPLACE_VINYL_UUID",vinyl_id_1)
+                .replaceAll("REPLACE_FILENAME",fileName)
+                .replaceAll("REPLACE_FILE",  Base64.encodeBase64String(bytes));
+
+        template.sendBody(imageRequest.replaceAll("\n","\\\\n"));
         imageMock.assertIsSatisfied();
 
         List<Map<String, Object>> imageInfo = jdbcTemplate

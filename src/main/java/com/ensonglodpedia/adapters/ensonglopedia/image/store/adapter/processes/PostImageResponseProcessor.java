@@ -11,7 +11,7 @@ public class PostImageResponseProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         Boolean success = exchange.getProperty("Success",Boolean.class);
-        String filename = exchange.getMessage().getHeader("Filename",String.class);
+        String filename = exchange.getProperty("filename",String.class);
 
         if(success){
             body = new ImagePostResponse(success, "Operation succeeded","%s");

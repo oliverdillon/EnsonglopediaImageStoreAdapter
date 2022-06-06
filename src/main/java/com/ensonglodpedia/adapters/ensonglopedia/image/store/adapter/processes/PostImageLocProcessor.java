@@ -18,7 +18,7 @@ public class PostImageLocProcessor implements Processor {
     public void process(Exchange exchange) throws Exception {
         String image_uuid = UUID.randomUUID().toString();
 
-        String vinyl_uuid = exchange.getMessage().getHeader("vinyl_id",String.class);
+        String vinyl_uuid = exchange.getProperty("vinyl_uuid",String.class);
         ImagePostResponse imagePostResponse = exchange.getMessage().getBody(ImagePostResponse.class);
 
         String query = "insert into vinyls.images(image_id,image_loc,vinyl_id ) values ('" +image_uuid+"'," +
